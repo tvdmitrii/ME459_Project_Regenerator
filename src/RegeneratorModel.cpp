@@ -843,65 +843,26 @@ int RegeneratorModel::getDesignSolution()
 	Eigen::VectorXd del_f(n);
 	Eigen::VectorXd del_x(n);
 	evaluate(x_0, f_0);
-	
-	
-	/*spdlog::get("logger")->info("T_H_out/T_H_in = " + to_string(x_0(0)) + ", T_H_out = " + to_string(x_0(0)*T_H_in));
-	spdlog::get("logger")->info("AR = " + to_string(x_0(1)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
-	spdlog::get("logger")->info("dP_C/P_C = " + to_string(x_0(2)) + ", dP_C = " + to_string(x_0(2)*P_C));
-	spdlog::get("logger")->info("V_0/max_Size = " + to_string(x_0(3)) + ", V_0 = " + to_string(x_0(3)*max_Size));
-	
-	spdlog::get("logger")->info("(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = " + to_string(f_0(0)) + ", Q_dot_a - Q_dot_a_calc = " + to_string(f_0(0)*(Q_dot_a + Q_dot_a_calc)));
-	spdlog::get("logger")->info("(dP_H - dP_H_calc)/P_H_in = " + to_string(f_0(1)) + ", dP_H - dP_H_calc = " + to_string(f_0(1)*P_H_in));
-	spdlog::get("logger")->info("(dP_C - dP_C_calc)/P_C = " + to_string(f_0(2)) + ", dP_C - dP_C_calc = " + to_string(f_0(2)*P_C));
-	spdlog::get("logger")->info("(UA - targetParameter) /  (targetParameter + UA) = " + to_string(f_0(3)) + ", UA - targetParameter = " + to_string(f_0(3)*((targetParameter + UA))));
-	*/
 
 	double eps = 1e-5;
 	int iterations = 0;
 	bool isInvertable = false;
-	//double* distance = new double[1000];
 	while (fabs(f_0(0)) > eps || fabs(f_0(1)) > eps || fabs(f_0(2)) > eps || fabs(f_0(3)) > eps) {
-
-		//distance[iterations] = pow(f_0(0),2) + pow(f_0(1), 2) + pow(f_0(2), 2) + pow(f_0(3), 2);
-
-		/*spdlog::get("logger")->info("\n");
-		spdlog::get("logger")->info("Jn");
-		for (int i = 0; i < n; i++) {
-			std::stringstream ss;
-			for (int j = 0; j < n; j++) {
-				ss << Jn(i, j) << " ";
-			}
-			spdlog::get("logger")->info(ss.str());
-		}
-		spdlog::get("logger")->info("\n");*/
 
 		isInvertable = Jn.fullPivLu().isInvertible();
 
 		if (!isInvertable) {
-			//spdlog::get("logger")->info("Non-reversable :( \n");
-			//spdlog::get("logger")->info("-");
 			return 1;
 		}
 		else {
 			Jn_inv = Jn.inverse();
 		}
-	
-		/*spdlog::get("logger")->info("Jn_inv");
-		for (int i = 0; i < n; i++) {
-			std::stringstream ss;
-			for (int j = 0; j < n; j++) {
-				ss << Jn_inv(i, j) << " ";
-			}
-			spdlog::get("logger")->info(ss.str());
-		}
-		spdlog::get("logger")->info("\n");*/
 
 		x_1 = x_0 - (Jn_inv * f_0);
 		del_x = x_1 - x_0;
 
 		
 		if (x_1(0) <= T_C_in/T_H_in || x_1(0) >= 1 || x_1(1) < 0 || x_1(1) >= 1 || x_1(2) < 0 || x_1(3) < 0 || x_1(3) >= 1) {
-			//spdlog::get("logger")->info("Refreshing jacobian");
 			jacobian(n, x_0, dx, Jn_tmp);
 			for (int i = 0; i < n; i++) {
 				if (x_1(i) < 0 || x_1(i) >= 1) {
@@ -913,58 +874,21 @@ int RegeneratorModel::getDesignSolution()
 				Jn(0, 0) = Jn_tmp(0, 0);
 			}
 
-			/*spdlog::get("logger")->info("\n");
-			spdlog::get("logger")->info("Jn");
-			for (int i = 0; i < n; i++) {
-				std::stringstream ss;
-				for (int j = 0; j < n; j++) {
-					ss << Jn(i, j) << " ";
-				}
-				spdlog::get("logger")->info(ss.str());
-			}
-			spdlog::get("logger")->info("\n");*/
-
 			isInvertable = Jn.fullPivLu().isInvertible();
 
 			if (!isInvertable) {
-				//spdlog::get("logger")->info("Non-reversable :( \n");
 				return 1;
 			}
 			else {
 				Jn_inv = Jn.inverse();
 			}
 
-			/*spdlog::get("logger")->info("Jn_inv");
-			for (int i = 0; i < n; i++) {
-				std::stringstream ss;
-				for (int j = 0; j < n; j++) {
-					ss << Jn_inv(i, j) << " ";
-				}
-				spdlog::get("logger")->info(ss.str());
-			}
-			spdlog::get("logger")->info("\n");*/
-
 			x_1 = x_0 - (Jn_inv * f_0);
 			del_x = x_1 - x_0;
 		}
 
-
-		
-		
-		/*spdlog::get("logger")->info("T_H_out/T_H_in = " + to_string(x_1(0)) + ", T_H_out = " + to_string(x_1(0)*T_H_in));
-		spdlog::get("logger")->info("AR = " + to_string(x_1(1)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
-		spdlog::get("logger")->info("dP_C/P_C = " + to_string(x_1(2)) + ", dP_C = " + to_string(x_1(2)*P_C));
-		spdlog::get("logger")->info("V_0/max_Size = " + to_string(x_1(3)) + ", V_0 = " + to_string(x_1(3)*max_Size));
-		*/
-
 		evaluate(x_1, f_1);
-		
-		
-		/*spdlog::get("logger")->info("(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = " + to_string(f_1(0)) + ", Q_dot_a - Q_dot_a_calc = " + to_string(f_1(0)*(Q_dot_a + Q_dot_a_calc)));
-		spdlog::get("logger")->info("(dP_H - dP_H_calc)/P_H_in = " + to_string(f_1(1)) + ", dP_H - dP_H_calc = " + to_string(f_1(1)*P_H_in));
-		spdlog::get("logger")->info("(dP_C - dP_C_calc)/P_C = " + to_string(f_1(2)) + ", dP_C - dP_C_calc = " + to_string(f_1(2)*P_C));
-		spdlog::get("logger")->info("(UA - targetParameter) / ( (targetParameter + UA)) = " + to_string(f_1(3)) + ", UA - targetParameter = " + to_string(f_1(3)*((targetParameter + UA))));
-		*/
+
 		del_f = f_1 - f_0;
 		
 		Jn = Jn + (del_f - Jn * del_x)*del_x.transpose() / del_x.squaredNorm();
@@ -989,7 +913,6 @@ int RegeneratorModel::getDesignSolution()
 		f_0 = f_1;
 
 		iterations++;
-		//spdlog::get("logger")->info(std::to_string(iterations) + "\n");
 	}
 
 	clock_t end = clock();
@@ -1000,22 +923,7 @@ int RegeneratorModel::getDesignSolution()
 		+ "," + to_string(targetParameter) + "," + to_string(targetdP_max_Regen) + "," + to_string(iterations)
 		+ "," + to_string(elapsed));
 
-	/*
-	spdlog::get("logger")->info("Solved after " + std::to_string(iterations) + " iterations.\n\n");
-	spdlog::get("logger")->info("T_H_out/T_H_in = " + to_string(x_0(0)) + ", T_H_out = " + to_string(x_0(0)*T_H_in));
-	spdlog::get("logger")->info("AR = " + to_string(x_0(1)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
-	spdlog::get("logger")->info("dP_C/P_C = " + to_string(x_0(2)) + ", dP_C = " + to_string(x_0(2)*P_C));
-	spdlog::get("logger")->info("V_0/max_Size = " + to_string(x_0(3)) + ", V_0 = " + to_string(x_0(3)*max_Size));
-	
-	spdlog::get("logger")->info("(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = " + to_string(f_0(0)) + ", Q_dot_a - Q_dot_a_calc = " + to_string(f_0(0)*(Q_dot_a + Q_dot_a_calc)));
-	spdlog::get("logger")->info("(dP_H - dP_H_calc)/P_H_in = " + to_string(f_0(1)) + ", dP_H - dP_H_calc = " + to_string(f_0(1)*P_H_in));
-	spdlog::get("logger")->info("(dP_C - dP_C_calc)/P_C = " + to_string(f_0(2)) + ", dP_C - dP_C_calc = " + to_string(f_0(2)*P_C));
-	spdlog::get("logger")->info("(UA - targetParameter) /  (targetParameter + UA) = " + to_string(f_0(3)) + ", UA - targetParameter = " + to_string(f_0(3)* (targetParameter + UA)));
-	*/
-	/*
-	for (int i = 0; i < iterations; i++) {
-		spdlog::get("logger")->info(to_string(distance[i]));
-	}*/
+	return 0;
 }
 
 int RegeneratorModel::getOffDesignSolution()
