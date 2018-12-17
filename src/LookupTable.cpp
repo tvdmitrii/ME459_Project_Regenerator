@@ -6,7 +6,7 @@
 *  \date      1/1/2018
 */
 
-#include "LookUpTable.h"
+#include "LookupTable.h"
 #include <iostream>
 #include <sstream>
 

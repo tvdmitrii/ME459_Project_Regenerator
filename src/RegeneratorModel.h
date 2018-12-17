@@ -6,6 +6,8 @@
 #include "numeric_solvers.h"
 #include <ctime>
 #include "build_config.h"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #define PI 3.14159265358979311600
 
