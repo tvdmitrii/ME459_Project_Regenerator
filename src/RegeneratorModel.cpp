@@ -1,9 +1,7 @@
 #include "RegeneratorModel.h"
 
-std::string SSCDIR1(std::getenv("SSCDIR"));
-
-string const RegeneratorModel::LOG_FILEPATH = SSCDIR1 + "/build_sdk/examples/RegenHX_LOG.log";
-string const RegeneratorModel::PROPERTY_FILES = SSCDIR1 + "/tcs/PropertyFiles/";
+string const RegeneratorModel::LOG_FILEPATH = "C:/Users/Dmitrii/Documents/ME459/me459-project/RegenHX_LOG.log";
+string const RegeneratorModel::PROPERTY_FILES = "C:/Users/Dmitrii/Documents/ME459/me459-project/PropertyFiles/";
 string const RegeneratorModel::SPHERES_RP_TABLE_PATH = PROPERTY_FILES + "Spheres_RP.csv";
 string const RegeneratorModel::BALANCED_REGENERATOR_TABLE_PATH = PROPERTY_FILES + "balanced-regenerator.csv";
 string const RegeneratorModel::FATIGUE_TABLE_PATH = PROPERTY_FILES + "fatigue.csv";
@@ -821,13 +819,6 @@ int RegeneratorModel::getDesignSolution()
 	Diameter_SP.isErrorRel = true;
 	Diameter_SP.classInst = this;
 
-	CarryoverMassFlow_SP.target = 0;
-	CarryoverMassFlow_SP.lowerBound = 0;		CarryoverMassFlow_SP.upperBound = min(m_dot_C, m_dot_H);
-	CarryoverMassFlow_SP.tolerance = 0.001;
-	CarryoverMassFlow_SP.iterationLimit = 50;
-	CarryoverMassFlow_SP.isErrorRel = false;
-	CarryoverMassFlow_SP.classInst = this;
-
 	if (secondTargetMode == targetModes::dP_max) {
 		Length_SP.solverName = "Length Solver";
 		Length_SP.target = targetdP_max_Regen;
@@ -849,37 +840,6 @@ int RegeneratorModel::getDesignSolution()
 	}
 
 	Diameter->setParameters(&Diameter_SP);
-
-	if (valveMode == valveDesignOption::valveModes::FIXED_CV) {
-		PressureSplit_SP.solverName = "Splits Pressure Drop Between Regenerator and Valves";
-		PressureSplit_SP.target = targetdP_max_Regen;
-		PressureSplit_SP.guessValue1 = targetdP_max_Regen * 0.8;		PressureSplit_SP.guessValue2 = targetdP_max_Regen * 0.9;
-		PressureSplit_SP.lowerBound = 0.1;					PressureSplit_SP.upperBound = P_H_in;
-		PressureSplit_SP.tolerance = 0.0001;
-		PressureSplit_SP.iterationLimit = 50;
-		PressureSplit_SP.isErrorRel = true;
-		PressureSplit_SP.classInst = this;
-		PressureSplit_SP.monoEquation = &RegeneratorModel::PressureSplit_ME;
-		PressureSplit->setParameters(&PressureSplit_SP);
-
-		CarryoverMassFlow_SP.solverName = "Carryover Mass Fixed CV Solver";
-		CarryoverMassFlow_SP.monoEquation = &RegeneratorModel::CarryoverMassFlow_FIXED_CV_ME;
-	}
-	else if (valveMode == valveDesignOption::valveModes::FIXED_DP) {
-		CarryoverMassFlow_SP.solverName = "Carryover Mass Fixed DP Solver";
-		CarryoverMassFlow_SP.monoEquation = &RegeneratorModel::CarryoverMassFlow_FIXED_DP_ME;
-	}
-
-	WallThickness_SP.solverName = "Wall Thickness";
-	WallThickness_SP.target = stressAmplitude;
-	WallThickness_SP.guessValue1 = 0.04;		WallThickness_SP.guessValue2 = 0.05;
-	WallThickness_SP.lowerBound = 0;			WallThickness_SP.upperBound = 1;
-	WallThickness_SP.tolerance = 0.001;
-	WallThickness_SP.iterationLimit = 50;
-	WallThickness_SP.isErrorRel = true;
-	WallThickness_SP.classInst = this;
-	WallThickness_SP.monoEquation = &RegeneratorModel::WallThickness_ME;
-	WallThickness->setParameters(&WallThickness_SP);
 	
 	int statusSolver;
 	statusSolver = Diameter->solve();
@@ -887,77 +847,6 @@ int RegeneratorModel::getDesignSolution()
 	if (statusSolver != C_monotonic_eq_solver::CONVERGED) {
 		return -1;
 	}
-	
-	calcCarryoverMassFlow();
-
-	CarryoverMassFlow_SP.guessValue1 = m_dot_carryover;
-	CarryoverMassFlow_SP.guessValue2 = m_dot_carryover + 1;
-	CarryoverMassFlow->setParameters(&CarryoverMassFlow_SP);
-
-	if (D_fr - 0.001 < Diameter_SP.lowerBound) {
-		Diameter->updateGuesses(D_fr, D_fr + 0.001);
-	}
-	else {
-		Diameter->updateGuesses(D_fr - 0.001, D_fr);
-	}
-
-	if (secondTargetMode == targetModes::dP_max) {
-		if (L - 0.001 < Length_SP.lowerBound) {
-			Length->updateGuesses(L, L + 0.001);
-		}
-		else {
-			Length->updateGuesses(L - 0.001, L);
-		}
-	}
-
-	if (T_H_out - 1 < HeatTransfer_SP.lowerBound) {
-		HeatTransfer->updateGuesses(T_H_out, T_H_out + 1);
-	}
-	else {
-		HeatTransfer->updateGuesses(T_H_out - 1, T_H_out);
-	}
-
-	if (dP_H - 10 < HotPressureDrop_SP.lowerBound) {
-		HotPressureDrop->updateGuesses(dP_H, dP_H + 10);
-	}
-	else {
-		HotPressureDrop->updateGuesses(dP_H - 10, dP_H);
-	}
-
-	if (dP_C - 10 < ColdPressureDrop_SP.lowerBound) {
-		ColdPressureDrop->updateGuesses(dP_C, dP_C+10);
-	}
-	else {
-		ColdPressureDrop->updateGuesses(dP_C - 10, dP_C);
-	}
-
-	double tolerance;
-	statusSolver = CarryoverMassFlow->solve(&tolerance);
-	
-	if (statusSolver != C_monotonic_eq_solver::CONVERGED) {
-		if (isfinite(tolerance) == false) {
-			return -1;
-		}
-
-		if (tolerance / min(m_dot_C, m_dot_H) > 0.01)
-		{
-			return -1;
-		}
-	}
-
-	if (valveMode == valveDesignOption::valveModes::FIXED_CV) {
-		dP_C = dP_C_total;
-		dP_H = dP_H_total;
-		calculateValveCvs();
-	}
-	
-	carryoverEnthDrop();
-	if (calculateCost() != 0) {
-		return -1;
-	}
-
-	m_dot_H -= m_dot_carryover;
-	m_dot_C -= m_dot_carryover;
 
 	return 0;
 }

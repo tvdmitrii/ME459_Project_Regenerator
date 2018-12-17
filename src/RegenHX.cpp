@@ -142,63 +142,13 @@ void RegenHX::design_fix_TARGET_calc_outlet(int targetType /*-*/, double targetV
 		return;
 	}
 
-	//High Pressure Low Temperature. T_c_in
-	valves[0].dP = 8.6;
-	valves[0].cost = 36000;
-	valves[0].cv = 950;
-
-	//High Pressure High Temperature. T_c_out
-	valves[1].dP = 13;
-	valves[1].cost = 74000;
-	valves[1].cv = 1100;
-
-	//Low Pressure High Temperature. T_h_in
-	valves[2].dP = 16;
-	valves[2].cost = 101000;
-	valves[2].cv = 1750;
-
-	//Low Pressure Low Temperature. T_h_out
-	valves[3].dP = 29.6;
-	
-	valves[4].cost = 15000;
-
-	if (operationMode == valveDesignOption::VDO1) {
-		valves[3].cost = 36000;
-		valves[3].cv = 950;
-	}
-	else if (operationMode == valveDesignOption::VDO2) {
-		valves[3].cost = 59000;
-		valves[3].cv = 1600;
-	}
-	
-	costValves = 4 * (valves[0].cost + valves[1].cost + valves[2].cost + valves[3].cost) + 2 * valves[4].cost;
-
-	regenModel->setValves(valves);
-
 	targetModes::target2Modes secondTargetMode = target_2;
-	
-	double dP_max_Regen;
-	if (secondTargetMode == targetModes::dP_max) {
-		if (valveMode == valveDesignOption::FIXED_DP) {
-			dP_max_Regen = max((P_h_in - P_h_out) / f_dP - valves[2].dP - valves[3].dP, (P_c_in - P_c_out) / f_dP - valves[0].dP - valves[1].dP);
-		}
-		else if (valveMode == valveDesignOption::FIXED_CV) {
-			dP_max_Regen = max((P_h_in - P_h_out) / f_dP, (P_c_in - P_c_out) / f_dP);
-		}
-	}
-	else if (secondTargetMode == targetModes::AR) {
-		dP_max_Regen = target_2_value;
-	}
+	double dP_max_Regen = target_2_value;
 	
 
 	setParameters(operationMode, valveMode, Q_dot_loss, P_0, D_s, e_v);
+	setInletStates(T_h_in, P_h_in, m_dot_h, T_c_in, P_c_in, m_dot_c);
 
-	if (valveMode == valveDesignOption::FIXED_DP) {
-		setInletStates(T_h_in, P_h_in - valves[2].dP, m_dot_h, T_c_in, P_c_in - valves[0].dP, m_dot_c);
-	}
-	else if (valveMode == valveDesignOption::FIXED_CV) {
-		setInletStates(T_h_in, P_h_in, m_dot_h, T_c_in, P_c_in, m_dot_c);
-	}
 
 	if (targetType == 0) {
 		setDesignTargets(targetModes::UA, secondTargetMode, targetValue, dP_max_Regen);
@@ -218,81 +168,9 @@ void RegenHX::design_fix_TARGET_calc_outlet(int targetType /*-*/, double targetV
 			"Regenerator model failed!");
 	}
 
-	if (epsilon > eff_limit && targetType != 2) {
-		ms_des_solved.m_eff_limited = true;
-		double oldUA = UA;
-		double oldCostHX = costHX;
-		setParameters(operationMode, valveMode, Q_dot_loss, P_0, D_s, e_v);
-
-		if (valveMode == valveDesignOption::FIXED_DP) {
-			setInletStates(T_h_in, P_h_in - valves[2].dP, m_dot_h, T_c_in, P_c_in - valves[0].dP, m_dot_c);
-		}
-		else if (valveMode == valveDesignOption::FIXED_CV) {
-			setInletStates(T_h_in, P_h_in, m_dot_h, T_c_in, P_c_in, m_dot_c);
-		}
-
-		setDesignTargets(targetModes::EFF, secondTargetMode, eff_limit, dP_max_Regen);
-
-		status = getDesignSolution();
-
-		if (status < 0) {
-			resetDesignStructure();
-			throw("RegenHX::design",
-				"Regenerator model failed!");
-		}
-
-		UA = oldUA;
-		costHX = oldCostHX;
-	}
-
 	q_dot = Q_dot_a;
 	T_c_out = T_C_out;
 	T_h_out = T_H_out;
-
-	if (valveMode == valveDesignOption::FIXED_DP) {
-		ms_des_solved.m_DP_cold_des = (m_HTR_HP_dP + valves[0].dP + valves[1].dP) * f_dP;
-		ms_des_solved.m_DP_hot_des = (m_HTR_LP_dP + valves[2].dP + valves[3].dP) * f_dP;
-
-		ms_des_solved.m_HTR_valve_HTHP_cv = valves[1].cv;
-		ms_des_solved.m_HTR_valve_LTHP_cv = valves[0].cv;
-		ms_des_solved.m_HTR_valve_HTLP_cv = valves[2].cv;
-		ms_des_solved.m_HTR_valve_LTLP_cv = valves[3].cv;
-	}
-	else if (valveMode == valveDesignOption::FIXED_CV) {
-		ms_des_solved.m_DP_cold_des = m_HTR_HP_dP * f_dP;
-		ms_des_solved.m_DP_hot_des = m_HTR_LP_dP * f_dP;
-
-		ms_des_solved.m_HTR_valve_HTHP_cv = valves[1].dP;
-		ms_des_solved.m_HTR_valve_LTHP_cv = valves[0].dP;
-		ms_des_solved.m_HTR_valve_HTLP_cv = valves[2].dP;
-		ms_des_solved.m_HTR_valve_LTLP_cv = valves[3].dP;
-	}
-	ms_des_solved.m_HTR_valve_HTHP_cv = valves[1].dP;
-	ms_des_solved.m_HTR_valve_LTHP_cv = valves[0].dP;
-	ms_des_solved.m_HTR_valve_HTLP_cv = valves[2].dP;
-	ms_des_solved.m_HTR_valve_LTLP_cv = valves[3].dP;
-	
-	ms_des_solved.m_eff_design = epsilon;
-	ms_des_solved.m_min_DT_design = min((T_H_in - T_H_out), (T_C_out - T_C_in));
-	ms_des_solved.m_NTU_design = NTU_R_e;
-	ms_des_solved.m_Q_dot_design = Q_dot_a;
-	ms_des_solved.m_T_c_out = T_C_out;
-	ms_des_solved.m_T_h_out = T_H_out;
-	ms_des_solved.m_HTR_AR = AspectRatio;
-	ms_des_solved.m_HTR_D_fr = D_fr;
-	ms_des_solved.m_HTR_L = L;
-
-	if (targetType == 0 || targetType == 2) {
-		ms_des_solved.m_UA_design_total = UA;
-	}
-	else if (targetType == 1) {
-		ms_des_solved.m_UA_design_total = costHX;
-	}
-	
-
-	ms_des_solved.m_aUA_design_total = UA;
-	ms_des_solved.m_cost_design_total = costHX;
-	ms_des_solved.m_m_dot_carryover = m_dot_carryover;
 }
 
 void RegenHX::off_design_solution(double T_c_in, double P_c_in, double m_dot_c, double P_c_out, double T_h_in, double P_h_in, double m_dot_h, double P_h_out, double & q_dot, double & T_c_out, double & T_h_out)
