@@ -55,7 +55,7 @@ int RegenHX::getDesignSolution()
 	return status;
 }
 
-void RegenHX::set_params(int target_1, int target_2, int operation_mode, int valveMode, double target_2_value, double P_0, double D_s, double e_v, double Q_dot_loss)
+void RegenHX::set_params(int target_1, int target_2, int operation_mode, int valveMode, double target_2_value, double P_0, double D_s, double e_v, double Q_dot_loss, double D_guess, double L_guess)
 {
 	this->target_1 = static_cast<targetModes::targetModes>(target_1) ;
 	this->target_2 = static_cast<targetModes::target2Modes>(target_2);
@@ -66,6 +66,8 @@ void RegenHX::set_params(int target_1, int target_2, int operation_mode, int val
 	this->D_s = D_s;
 	this->Q_dot_loss = Q_dot_loss;
 	this->e_v = e_v;
+	this->D_guess = D_guess;
+	this->L_guess = L_guess;
 }
 
 int RegenHX::getDesignSolution(double* results)
@@ -218,7 +220,7 @@ void RegenHX::setParameters(valveDesignOption::valveDesignOption operationMode, 
 {
 	this->operationMode = operationMode;
 	this->valveMode = valveMode;
-	regenModel->setParameters(valveMode, Q_dot_loss, P_0, D_s, e_v);
+	regenModel->setParameters(valveMode, Q_dot_loss, P_0, D_s, e_v, D_guess, L_guess);
 }
 
 void RegenHX::setDesignTargets(targetModes::targetModes targetMode, targetModes::target2Modes secondTargetMode, double targetParameter, double secondTargetParameter)

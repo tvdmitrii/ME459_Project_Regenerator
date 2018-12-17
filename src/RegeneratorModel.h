@@ -643,6 +643,9 @@ private:
 	*/
 	double targetParameter;
 
+	double D_guess;
+	double L_guess;
+
 	/*! \brief Calculates the friction factor and Colburn j factor.
 	
 		PackedSpheres_ND returns the friction factor and Colburn j factor (St Pr^(2/3)) for a packed bed consisting of randomly packed spheres.
@@ -844,7 +847,7 @@ public:
 		\param e_v Porosity or ratio of empty space inside of the heat exchanger to its total volume
 		\sa setInletState(), setDesignTargets()
 	*/
-	void setParameters(valveDesignOption::valveModes valveMode, double Q_dot_loss, double P_0, double D_s, double e_v);
+	void setParameters(valveDesignOption::valveModes valveMode, double Q_dot_loss, double P_0, double D_s, double e_v, double D_guess, double L_guess);
 
 	/*!	\brief Sets design parameters.
 

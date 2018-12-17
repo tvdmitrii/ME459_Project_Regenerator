@@ -426,13 +426,15 @@ void RegeneratorModel::setOutletStates(double T_H_out, double P_H_out, double T_
 	this->dP_C = P_C - P_C_out;
 }
 
-void RegeneratorModel::setParameters(valveDesignOption::valveModes valveMode, double Q_dot_loss, double P_0, double D_s, double e_v)
+void RegeneratorModel::setParameters(valveDesignOption::valveModes valveMode, double Q_dot_loss, double P_0, double D_s, double e_v, double D_guess, double L_guess)
 {
 	this->valveMode = valveMode;
 	this->Q_dot_loss = Q_dot_loss;
 	this->D_s = D_s;
 	this->e_v = e_v;
 	this->P_0 = P_0;
+	this->D_guess = D_guess;
+	this->L_guess = L_guess;
 
 	numberOfCycles = 1.2 * operationYears * 365 * operationHoursPerDay * 60 * 60 / P_0;
 	stressAmplitude = fatigueTable->getValue("Sa", "N", numberOfCycles) * 6.89475729; //Convert ksi to MPA
@@ -814,7 +816,7 @@ int RegeneratorModel::getDesignSolution()
 	double m_dot_average = (m_dot_C + m_dot_H) / 2;
 
 	Diameter_SP.target = targetParameter;
-	Diameter_SP.guessValue1 = 0.8 * m_dot_average / 37;		Diameter_SP.guessValue2 = 1.1 * m_dot_average / 37;
+	Diameter_SP.guessValue1 = D_guess;		Diameter_SP.guessValue2 = D_guess + 0.1;
 	Diameter_SP.lowerBound = 0.1;		Diameter_SP.upperBound = 10;
 	Diameter_SP.tolerance = 0.0001;
 	Diameter_SP.iterationLimit = 50;
@@ -824,7 +826,7 @@ int RegeneratorModel::getDesignSolution()
 	if (secondTargetMode == targetModes::dP_max) {
 		Length_SP.solverName = "Length Solver";
 		Length_SP.target = targetdP_max_Regen;
-		Length_SP.guessValue1 = 0.8;		Length_SP.guessValue2 = 1.1;
+		Length_SP.guessValue1 = L_guess;		Length_SP.guessValue2 = L_guess + 0.1;
 		Length_SP.lowerBound = 0.1;			Length_SP.upperBound = 10;
 		Length_SP.tolerance = 0.0001;
 		Length_SP.iterationLimit = 50;
@@ -852,7 +854,7 @@ int RegeneratorModel::getDesignSolution()
 
 	clock_t end = clock();
 	double elapsed = double(end - begin) / CLOCKS_PER_SEC * 1000;
-	spdlog::get("logger")->info(to_string(T_H_out) + "," + to_string(L) + "," + to_string(D_fr) + "," +
+	spdlog::get("logger")->info(to_string(L_guess) + "," + to_string(D_guess) + "," + to_string(T_H_out) + "," + to_string(L) + "," + to_string(D_fr) + "," +
 		to_string(V_0) + "," + to_string(AR) + "," + to_string(UA) + "," + to_string(dP_max) + "," + to_string(epsilon) + "," +
 		to_string(Q_dot_a - Q_dot_a_calc) + "," + to_string(dP_H - dP_H_calc) + "," + to_string(dP_C - dP_C_calc)
 		+ "," + to_string(targetParameter) + "," + to_string(targetdP_max_Regen) + "," + to_string(elapsed));

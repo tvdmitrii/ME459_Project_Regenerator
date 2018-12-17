@@ -87,6 +87,8 @@ private:
 	double D_s;
 	double Q_dot_loss;
 	double e_v;
+	double D_guess;
+	double L_guess;
 
 	double f_dP = 1.2;
 
@@ -163,7 +165,7 @@ public:
 	*/
 	int getDesignSolution();
 
-	void set_params(int target_1, int target_2, int operation_mode, int valveMode, double target_2_value, double P_0, double D_s, double e_v, double Q_dot_loss);
+	void set_params(int target_1, int target_2, int operation_mode, int valveMode, double target_2_value, double P_0, double D_s, double e_v, double Q_dot_loss, double D_guess, double L_guess);
 	
 	int getDesignSolution(double* results);
 
