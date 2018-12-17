@@ -802,7 +802,7 @@ private:
 	*/
 	void carryoverEnthDrop();
 
-	double max_Size = 50;
+	double max_Size = 5;
 
 	//void calcValvePressureDrops();
 
@@ -874,11 +874,7 @@ public:
 
 	void setSolver(Eigen::VectorXd & params);
 
-	void differences(int n, Eigen::VectorXd & point, Eigen::VectorXd & targets, Eigen::VectorXd & steps, Eigen::MatrixXd & values);
-
-	void jacobian_n(int n, Eigen::VectorXd & x_n, Eigen::VectorXd & x_nm1, Eigen::VectorXd & f_n, Eigen::VectorXd & f_nm1, Eigen::MatrixXd & Jn);
-
-	void jacobian_first_time(int n, Eigen::VectorXd x_nm1, Eigen::VectorXd x_n, Eigen::MatrixXd & Jn);
+	void jacobian(int n, Eigen::VectorXd x_nm1, Eigen::VectorXd x_n, Eigen::MatrixXd & Jn);
 
 	void evaluate(Eigen::VectorXd point, Eigen::VectorXd & values);
 	

@@ -779,47 +779,12 @@ int RegeneratorModel::PressureSplit_ME(double regenMaxDrop_guess, double *regenM
 
 void RegeneratorModel::setSolver(Eigen::VectorXd& params) {
 	this->T_H_out = params(0)*T_H_in;
-	this->dP_H = params(1)*P_H_in;
+	this->AR = params(1)*max_Size;
 	this->dP_C = params(2)*P_C;
 	this->V_0 = params(3)*max_Size;
-	//this->AR = params(4)*max_Size;
-	//this->L = params(4)*max_Size;
-	//this->wallThickness = params(5);
-	//this->m_dot_carryover = params(6);
 }
 
-void RegeneratorModel::jacobian_n(int n, Eigen::VectorXd& x_nm1, Eigen::VectorXd& x_n, Eigen::VectorXd& f_nm1, Eigen::VectorXd& f_n, Eigen::MatrixXd& Jn) {
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			Jn(i, j) = (f_n(i) - f_nm1(i)) / (x_n(j) - x_nm1(j));
-		}
-	}
-
-	Jn(0, 1) = 0;
-	Jn(0, 2) = 0;
-	Jn(0, 3) = 0;
-	Jn(0, 4) = 0;
-
-	Jn(1, 0) = 0;
-	Jn(1, 2) = 0;
-	Jn(1, 3) = 0;
-	Jn(1, 4) = 0;
-
-	Jn(2, 0) = 0;
-	Jn(2, 1) = 0;
-	Jn(2, 3) = 0;
-	Jn(2, 4) = 0;
-
-	Jn(3, 0) = 0;
-	Jn(3, 1) = 0;
-	Jn(3, 2) = 0;
-
-	Jn(4, 0) = 0;
-	Jn(4, 1) = 0;
-	Jn(4, 2) = 0;
-}
-
-void RegeneratorModel::jacobian_first_time(int n, Eigen::VectorXd x_n, Eigen::VectorXd dx, Eigen::MatrixXd& Jn) {
+void RegeneratorModel::jacobian(int n, Eigen::VectorXd x_n, Eigen::VectorXd dx, Eigen::MatrixXd& Jn) {
 	Eigen::VectorXd f_i(n);
 	Eigen::VectorXd f_im1(n);
 	Eigen::VectorXd f_ip1(n);
@@ -837,145 +802,89 @@ void RegeneratorModel::jacobian_first_time(int n, Eigen::VectorXd x_n, Eigen::Ve
 
 		// Through functions
 		for (int i = 0; i < n; i++) {
-			Jn(i, j) = -(f_im1(i) + f_ip1(i) - 2 * f_i(i)) / pow(dx(j), 2);
+			Jn(i, j) = (f_im1(i) + f_ip1(i) - 2 * f_i(i)) / pow(dx(j), 2);
 		}
 	}
 
 	Jn(0, 1) = 0;
 	Jn(0, 2) = 0;
 	Jn(0, 3) = 0;
-	//Jn(0, 4) = 0;
 
 	Jn(1, 0) = 0;
 	Jn(1, 2) = 0;
 	Jn(1, 3) = 0;
-	//Jn(1, 4) = 0;
 
 	Jn(2, 0) = 0;
 	Jn(2, 1) = 0;
 	Jn(2, 3) = 0;
-	//Jn(2, 4) = 0;
 
 	Jn(3, 0) = 0;
 	Jn(3, 1) = 0;
 	Jn(3, 2) = 0;
-	//Jn(3, 4) = 0;
-
-	//Jn(4, 0) = 0;
-	//Jn(4, 1) = 0;
-	//Jn(4, 2) = 0;
-	//Jn(4, 3) = 0;
 }
 
 void RegeneratorModel::evaluate(Eigen::VectorXd point, Eigen::VectorXd& f) {
 	setSolver(point);
-
-	//this->m_dot_C -= m_dot_carryover_guess;
-	//this->m_dot_H -= m_dot_carryover_guess;
-
-	//massflowVariablesInit();
 	calculateModel();
-	//calculateCost();
-
-	//this->m_dot_C += m_dot_carryover;
-	//this->m_dot_H += m_dot_carryover;
-
-	//calcCarryoverMassFlow();
 
 	f(0) = (Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc);
 	f(1) = (dP_H - dP_H_calc)/P_H_in;
 	f(2) = (dP_C - dP_C_calc)/P_C;
 	f(3) = (UA - targetParameter)/ (targetParameter + UA);
-	//f(4) = (dP_max - targetdP_max_Regen)/targetdP_max_Regen;
-	//values(5) = stressAmplitude_calc - targets(5);
-	//values(6) = m_dot_carryover_guess - m_dot_carryover;
 }
 
 int RegeneratorModel::getDesignSolution()
 {
-	spdlog::get("logger")->info("Here1");
 	int n = 4;
 
 	Eigen::VectorXd x_0(n);
 	Eigen::VectorXd x_1(n);
-	/*parameters(0) = 490;
-	parameters(1) = 215;
-	parameters(2) = 60;
-	parameters(3) = 1.2;
-	parameters(4) = 1.1;*/
 
-	//T_H_out = 450;
-	//dP_C = 60;
-	//dP_H = 225;
-	//D_fr = 1.2;
-	//L = 1.1;
-	AR = 1.1;
+	dP_H = targetdP_max_Regen;
 
-	spdlog::get("logger")->info("Here2");
-	x_0(0) = 600/T_H_in;//(T_C_in + T_H_in) / 2;
-	x_0(1) = 0.8*targetdP_max_Regen/P_H_in;
+	x_0(0) = 650/T_H_in;
+	x_0(1) = 0.9/max_Size;
 	x_0(2) = 0.3*targetdP_max_Regen/P_C;
 	x_0(3) = 2.5/max_Size;
-	//x_0(4) = 0.7/max_Size;
-	spdlog::get("logger")->info("Here3");
-
-	//Eigen::VectorXd targets(n);
-	//targets(0) = 0;
-	//targets(1) = 0;
-	//targets(2) = 0;
-	//targets(3) = targetParameter;
-	//targets(4) = targetdP_max_Regen;
-	//spdlog::get("logger")->info(targetParameter);
-	//spdlog::get("logger")->info(to_string(targetdP_max_Regen) + "\n");
-	//targets(5) = stressAmplitude;
-	//targets(6) = 0;
 
 	Eigen::VectorXd dx(n);
 	dx(0) = 1/T_H_in;
-	dx(1) = 1/P_H_in;
+	dx(1) = 0.1 / max_Size;
 	dx(2) = 1/P_C;
 	dx(3) = 0.1/max_Size;
-	//dx(4) = 0.1/max_Size;
-	Eigen::MatrixXd Jn(n, n);
-	spdlog::get("logger")->info("Here4");
-	jacobian_first_time(n, x_0, dx, Jn);
-	spdlog::get("logger")->info("Here5");
 
-	//Eigen::VectorXd damping(n);
-	//damping(0) = 1;
-	//damping(1) = 0.5;
-	//damping(2) = 0.5;
-	//damping(3) = 1;
-	//damping(4) = 1;
+	Eigen::MatrixXd Jn(n, n);
+	jacobian(n, x_0, dx, Jn);
+
 	
 	Eigen::MatrixXd Jn_inv(n, n);
+	Eigen::MatrixXd Jn_tmp(n, n);
 	Eigen::VectorXd f_0(n);
 	Eigen::VectorXd f_1(n);
 	Eigen::VectorXd del_f(n);
 	Eigen::VectorXd del_x(n);
 	evaluate(x_0, f_0);
 	
-
+	
 	spdlog::get("logger")->info("T_H_out/T_H_in = " + to_string(x_0(0)) + ", T_H_out = " + to_string(x_0(0)*T_H_in));
-	spdlog::get("logger")->info("dP_H/P_H_in = " + to_string(x_0(1)) + ", dP_H = " + to_string(x_0(1)*P_H_in));
+	spdlog::get("logger")->info("AR = " + to_string(x_0(1)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
 	spdlog::get("logger")->info("dP_C/P_C = " + to_string(x_0(2)) + ", dP_C = " + to_string(x_0(2)*P_C));
 	spdlog::get("logger")->info("V_0/max_Size = " + to_string(x_0(3)) + ", V_0 = " + to_string(x_0(3)*max_Size));
-	//spdlog::get("logger")->info("AR = " + to_string(x_0(4)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
+	
 	spdlog::get("logger")->info("(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = " + to_string(f_0(0)) + ", Q_dot_a - Q_dot_a_calc = " + to_string(f_0(0)*(Q_dot_a + Q_dot_a_calc)));
 	spdlog::get("logger")->info("(dP_H - dP_H_calc)/P_H_in = " + to_string(f_0(1)) + ", dP_H - dP_H_calc = " + to_string(f_0(1)*P_H_in));
 	spdlog::get("logger")->info("(dP_C - dP_C_calc)/P_C = " + to_string(f_0(2)) + ", dP_C - dP_C_calc = " + to_string(f_0(2)*P_C));
 	spdlog::get("logger")->info("(UA - targetParameter) /  (targetParameter + UA) = " + to_string(f_0(3)) + ", UA - targetParameter = " + to_string(f_0(3)*((targetParameter + UA))));
-	//spdlog::get("logger")->info("(dP_max - targetdP_max_Regen) / targetdP_max_Regen = " + to_string(f_0(4)) + ", dP_max - targetdP_max_Regen = " + to_string(f_0(4)*targetdP_max_Regen));
+	
 
 	double eps = 1e-5;
 	int iterations = 0;
 	bool isInvertable = false;
-	//double distance = std::numeric_limits<double>::max();
-	//double best_distance = std::numeric_limits<double>::max();
 	double* distance = new double[1000];
+
 	while (fabs(f_0(0)) > eps || fabs(f_0(1)) > eps || fabs(f_0(2)) > eps || fabs(f_0(3)) > eps) {
 
-		distance[iterations] = fabs(f_0(0)) + fabs(f_0(1)) + fabs(f_0(2)) + fabs(f_0(3));
+		distance[iterations] = pow(f_0(0),2) + pow(f_0(1), 2) + pow(f_0(2), 2) + pow(f_0(3), 2);
 
 		spdlog::get("logger")->info("\n");
 		spdlog::get("logger")->info("Jn");
@@ -992,11 +901,10 @@ int RegeneratorModel::getDesignSolution()
 
 		if (!isInvertable) {
 			spdlog::get("logger")->info("Non-reversable :( \n");
-			return 0;
+			return 1;
 		}
 		else {
 			Jn_inv = Jn.inverse();
-			//Jn_inv.normalize();
 		}
 	
 		spdlog::get("logger")->info("Jn_inv");
@@ -1011,32 +919,70 @@ int RegeneratorModel::getDesignSolution()
 
 		x_1 = x_0 - (Jn_inv * f_0);
 		del_x = x_1 - x_0;
-		/*if (x_1(3) < 0) {
-			x_1(3) = 0.1/max_Size;
-			del_x = x_1 - x_0;
-		}*/
-		/*for (int i = 0; i < n; i++) {
-			if (fabs(del_x(i) / x_0(i)) > 0.3) {
-				del_x(i) = copysign(x_0(i)*0.3, del_x(i));
+
+		
+		if (x_1(0) < 0 || x_1(0) >= 1 || x_1(1) < 0 || x_1(2) < 0 || x_1(3) < 0) {
+			spdlog::get("logger")->info("Refreshing jacobian");
+			jacobian(n, x_0, dx, Jn_tmp);
+			for (int i = 0; i < n; i++) {
+				if (x_1(i) < 0) {
+					Jn(i, i) = Jn_tmp(i, i);
+				}
 			}
-		}*/
+			if (x_1(0) >= 1) {
+				Jn(0, 0) = Jn_tmp(0, 0);
+			}
+
+			spdlog::get("logger")->info("\n");
+			spdlog::get("logger")->info("Jn");
+			for (int i = 0; i < n; i++) {
+				std::stringstream ss;
+				for (int j = 0; j < n; j++) {
+					ss << Jn(i, j) << " ";
+				}
+				spdlog::get("logger")->info(ss.str());
+			}
+			spdlog::get("logger")->info("\n");
+
+			isInvertable = Jn.fullPivLu().isInvertible();
+
+			if (!isInvertable) {
+				spdlog::get("logger")->info("Non-reversable :( \n");
+				return 1;
+			}
+			else {
+				Jn_inv = Jn.inverse();
+			}
+
+			spdlog::get("logger")->info("Jn_inv");
+			for (int i = 0; i < n; i++) {
+				std::stringstream ss;
+				for (int j = 0; j < n; j++) {
+					ss << Jn_inv(i, j) << " ";
+				}
+				spdlog::get("logger")->info(ss.str());
+			}
+			spdlog::get("logger")->info("\n");
+
+			x_1 = x_0 - (Jn_inv * f_0);
+			del_x = x_1 - x_0;
+		}
+
 
 		
 
 		spdlog::get("logger")->info("T_H_out/T_H_in = " + to_string(x_1(0)) + ", T_H_out = " + to_string(x_1(0)*T_H_in));
-		spdlog::get("logger")->info("dP_H/P_H_in = " + to_string(x_1(1)) + ", dP_H = " + to_string(x_1(1)*P_H_in));
+		spdlog::get("logger")->info("AR = " + to_string(x_1(1)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
 		spdlog::get("logger")->info("dP_C/P_C = " + to_string(x_1(2)) + ", dP_C = " + to_string(x_1(2)*P_C));
 		spdlog::get("logger")->info("V_0/max_Size = " + to_string(x_1(3)) + ", V_0 = " + to_string(x_1(3)*max_Size));
-		//spdlog::get("logger")->info("AR = " + to_string(x_1(4)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
-
+		
 		evaluate(x_1, f_1);
 		
 		spdlog::get("logger")->info("(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = " + to_string(f_1(0)) + ", Q_dot_a - Q_dot_a_calc = " + to_string(f_1(0)*(Q_dot_a + Q_dot_a_calc)));
 		spdlog::get("logger")->info("(dP_H - dP_H_calc)/P_H_in = " + to_string(f_1(1)) + ", dP_H - dP_H_calc = " + to_string(f_1(1)*P_H_in));
 		spdlog::get("logger")->info("(dP_C - dP_C_calc)/P_C = " + to_string(f_1(2)) + ", dP_C - dP_C_calc = " + to_string(f_1(2)*P_C));
 		spdlog::get("logger")->info("(UA - targetParameter) / ( (targetParameter + UA)) = " + to_string(f_1(3)) + ", UA - targetParameter = " + to_string(f_1(3)*((targetParameter + UA))));
-		//spdlog::get("logger")->info("(dP_max - targetdP_max_Regen) / targetdP_max_Regen = " + to_string(f_1(4)) + ", dP_max - targetdP_max_Regen = " + to_string(f_1(4)*targetdP_max_Regen));
-
+		
 		del_f = f_1 - f_0;
 		
 		Jn = Jn + (del_f - Jn * del_x)*del_x.transpose() / del_x.squaredNorm();
@@ -1044,314 +990,41 @@ int RegeneratorModel::getDesignSolution()
 		Jn(0, 1) = 0;
 		Jn(0, 2) = 0;
 		//Jn(0, 3) = 0;
-		//Jn(0, 4) = 0;
 
 		Jn(1, 0) = 0;
 		Jn(1, 2) = 0;
-		Jn(1, 3) = 0;
-		//Jn(1, 4) = 0;
+		//Jn(1, 3) = 0;
 
 		Jn(2, 0) = 0;
 		Jn(2, 1) = 0;
 		Jn(2, 3) = 0;
-		//Jn(2, 4) = 0;
 
 		Jn(3, 0) = 0;
 		Jn(3, 1) = 0;
 		Jn(3, 2) = 0;
-		//Jn(3, 4) = 0;
-
-		/*Jn(4, 0) = 0;
-		Jn(4, 1) = 0;
-		Jn(4, 2) = 0;
-		Jn(4, 3) = 0;*/
 
 		x_0 = x_1;
 		f_0 = f_1;
 
-		
-		
-
-		
-
-		/*spdlog::get("logger")->info("Step size: " + std::to_string(steps(0)));
-		for (int i = 0; i < n; i++) {
-			if (parameters(i) < lowerBounds(i)) {
-				parameters(i) = lowerBounds(i);
-			}
-		}
-
-		std::stringstream ss1, ss2, ss3, ss4, ss5;
-		ss1 << parameters;
-		spdlog::get("logger")->info("Parameters");
-		spdlog::get("logger")->info(ss1.str());
-
-		differences(n, parameters, targets, steps, diff);
-		evaluate(parameters, targets, values);
-		Solver::jacobian(n, diff, steps, jacobian);
-
-		ss2 << values;
-		ss3 << jacobian;
-		ss4 << diff;
-
-		spdlog::get("logger")->info("Values");
-		spdlog::get("logger")->info(ss2.str());
-
-		spdlog::get("logger")->info("Jacobian");
-		spdlog::get("logger")->info(ss3.str());
-
-		distance = sqrt(values(0)*values(0) + values(1)*values(1) + values(2)*values(2) + values(3)*values(3) + values(4)*values(4) + values(5)*values(5) + values(6)*values(6));
-
-		if (distance >= best_distance) {
-			for (int i = 0; i < n; i++) {
-				steps(i) /= 2;
-			}
-			continue;
-		}
-		else {
-			best_distance = distance;
-		}
-
-		spdlog::get("logger")->info("Values\n");
-		spdlog::get("logger")->info(ss2.str());
-		spdlog::get("logger")->info("\n\n");
-
-		spdlog::get("logger")->info("Distance: " + std::to_string(distance));
-
-			spdlog::get("logger")->info("Differences\n");
-			spdlog::get("logger")->info(ss4.str());
-			spdlog::get("logger")->info("\n\n");
-
-			spdlog::get("logger")->info("Jacobian\n");
-			spdlog::get("logger")->info(ss3.str());
-			spdlog::get("logger")->info("\n\n");
-
-			//jacobian.computeInverseWithCheck(jacobian_inverse, isInvertable);
-		isInvertable = jacobian.fullPivLu().isInvertible();
-		//	spdlog::get("logger")->info("Jacobian is invertable: " + std::to_string(isInvertable) + "\n");
-
-		if (!isInvertable) {
-			return 0;
-		}
-		else {
-			jacobian_inverse = jacobian.inverse();
-		}
-
-		parameters = parameters - limiter * jacobian_inverse * values;*/
 		iterations++;
 		spdlog::get("logger")->info(std::to_string(iterations) + "\n");
 	}
 
 	spdlog::get("logger")->info("Solved after " + std::to_string(iterations) + " iterations.\n\n");
 	spdlog::get("logger")->info("T_H_out/T_H_in = " + to_string(x_0(0)) + ", T_H_out = " + to_string(x_0(0)*T_H_in));
-	spdlog::get("logger")->info("dP_H/P_H_in = " + to_string(x_0(1)) + ", dP_H = " + to_string(x_0(1)*P_H_in));
+	spdlog::get("logger")->info("AR = " + to_string(x_0(1)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
 	spdlog::get("logger")->info("dP_C/P_C = " + to_string(x_0(2)) + ", dP_C = " + to_string(x_0(2)*P_C));
 	spdlog::get("logger")->info("V_0/max_Size = " + to_string(x_0(3)) + ", V_0 = " + to_string(x_0(3)*max_Size));
-	//spdlog::get("logger")->info("AR = " + to_string(x_0(4)*max_Size) + ", L = " + to_string(L) + ", D_fr = " + to_string(D_fr));
+	
 	spdlog::get("logger")->info("(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = " + to_string(f_0(0)) + ", Q_dot_a - Q_dot_a_calc = " + to_string(f_0(0)*(Q_dot_a + Q_dot_a_calc)));
 	spdlog::get("logger")->info("(dP_H - dP_H_calc)/P_H_in = " + to_string(f_0(1)) + ", dP_H - dP_H_calc = " + to_string(f_0(1)*P_H_in));
 	spdlog::get("logger")->info("(dP_C - dP_C_calc)/P_C = " + to_string(f_0(2)) + ", dP_C - dP_C_calc = " + to_string(f_0(2)*P_C));
 	spdlog::get("logger")->info("(UA - targetParameter) /  (targetParameter + UA) = " + to_string(f_0(3)) + ", UA - targetParameter = " + to_string(f_0(3)* (targetParameter + UA)));
-	//spdlog::get("logger")->info("(dP_max - targetdP_max_Regen) / targetdP_max_Regen = " + to_string(f_0(4)) + ", dP_max - targetdP_max_Regen = " + to_string(f_0(4)*targetdP_max_Regen));
-
+	
 	for (int i = 0; i < iterations; i++) {
 		spdlog::get("logger")->info(to_string(distance[i]));
 	}
-
-	/*std::stringstream ss1, ss2;
-	ss1 << x_n;
-	ss2 << f_n;
-	spdlog::get("logger")->info(ss1.str());
-	spdlog::get("logger")->info("\n\n");
-	spdlog::get("logger")->info(ss2.str());
-	spdlog::get("logger")->info("\n\n");*/
 }
-	/*HeatTransfer_SP.solverName = "Balance Heat Tansfer";
-	HeatTransfer_SP.target = 0;
-	HeatTransfer_SP.guessValue1 = T_C_in;						HeatTransfer_SP.guessValue2 = (T_C_in + T_H_in) / 2;
-	HeatTransfer_SP.lowerBound = N_co2_props::T_lower_limit;	HeatTransfer_SP.upperBound = N_co2_props::T_upper_limit;
-	HeatTransfer_SP.tolerance = 0.1;
-	HeatTransfer_SP.iterationLimit = 50;
-	HeatTransfer_SP.isErrorRel = false;
-	HeatTransfer_SP.classInst = this;
-	HeatTransfer_SP.monoEquation = &RegeneratorModel::HeatTransfer_ME;
-	HeatTransfer->setParameters(&HeatTransfer_SP);
-
-	if (secondTargetMode == targetModes::AR) {
-		targetdP_max_Regen = 187.5;
-	}
-	HotPressureDrop_SP.solverName = "Balance Hot Pressure Drop";
-	HotPressureDrop_SP.target = 0;
-	HotPressureDrop_SP.guessValue1 = 0.8*targetdP_max_Regen;		HotPressureDrop_SP.guessValue2 = targetdP_max_Regen;
-	HotPressureDrop_SP.lowerBound = 0.1;					HotPressureDrop_SP.upperBound = P_H_in;
-	HotPressureDrop_SP.tolerance = 0.0001;
-	HotPressureDrop_SP.iterationLimit = 50;
-	HotPressureDrop_SP.isErrorRel = false;
-	HotPressureDrop_SP.classInst = this;
-	HotPressureDrop_SP.monoEquation = &RegeneratorModel::HotPressureDrop_ME;
-	HotPressureDrop->setParameters(&HotPressureDrop_SP);
-
-	ColdPressureDrop_SP.solverName = "Balance Cold Pressure Drop";
-	ColdPressureDrop_SP.target = 0;
-	ColdPressureDrop_SP.guessValue1 = 0.3*targetdP_max_Regen - 1;		ColdPressureDrop_SP.guessValue2 = 0.3*targetdP_max_Regen;
-	ColdPressureDrop_SP.lowerBound = 0.1;							ColdPressureDrop_SP.upperBound = P_C;
-	ColdPressureDrop_SP.tolerance = 0.0001;
-	ColdPressureDrop_SP.iterationLimit = 50;
-	ColdPressureDrop_SP.isErrorRel = false;
-	ColdPressureDrop_SP.classInst = this;
-	ColdPressureDrop_SP.monoEquation = &RegeneratorModel::ColdPressureDrop_ME;
-	ColdPressureDrop->setParameters(&ColdPressureDrop_SP);
-	
-	double m_dot_average = (m_dot_C + m_dot_H) / 2;
-
-	Diameter_SP.target = targetParameter;
-	Diameter_SP.guessValue1 = 0.8 * m_dot_average / 37;		Diameter_SP.guessValue2 = 1.1 * m_dot_average / 37;
-	Diameter_SP.lowerBound = 0.1;		Diameter_SP.upperBound = 10;
-	Diameter_SP.tolerance = 0.0001;
-	Diameter_SP.iterationLimit = 50;
-	Diameter_SP.isErrorRel = true;
-	Diameter_SP.classInst = this;
-
-	CarryoverMassFlow_SP.target = 0;
-	CarryoverMassFlow_SP.lowerBound = 0;		CarryoverMassFlow_SP.upperBound = min(m_dot_C, m_dot_H);
-	CarryoverMassFlow_SP.tolerance = 0.001;
-	CarryoverMassFlow_SP.iterationLimit = 50;
-	CarryoverMassFlow_SP.isErrorRel = false;
-	CarryoverMassFlow_SP.classInst = this;
-
-	if (secondTargetMode == targetModes::dP_max) {
-		Length_SP.solverName = "Length Solver";
-		Length_SP.target = targetdP_max_Regen;
-		Length_SP.guessValue1 = 0.8;		Length_SP.guessValue2 = 1.1;
-		Length_SP.lowerBound = 0.1;			Length_SP.upperBound = 10;
-		Length_SP.tolerance = 0.0001;
-		Length_SP.iterationLimit = 50;
-		Length_SP.isErrorRel = true;
-		Length_SP.classInst = this;
-		Length_SP.monoEquation = &RegeneratorModel::Length_ME;
-		Length->setParameters(&Length_SP);
-
-		Diameter_SP.solverName = "Diameter_dP Solver";
-		Diameter_SP.monoEquation = &RegeneratorModel::Diameter_dP_ME;
-	}
-	else if (secondTargetMode == targetModes::AR) {
-		Diameter_SP.solverName = "Diameter_AR Solver";
-		Diameter_SP.monoEquation = &RegeneratorModel::Diameter_AR_ME;
-	}
-
-	Diameter->setParameters(&Diameter_SP);
-
-	if (valveMode == valveDesignOption::valveModes::FIXED_CV) {
-		PressureSplit_SP.solverName = "Splits Pressure Drop Between Regenerator and Valves";
-		PressureSplit_SP.target = targetdP_max_Regen;
-		PressureSplit_SP.guessValue1 = targetdP_max_Regen * 0.8;		PressureSplit_SP.guessValue2 = targetdP_max_Regen * 0.9;
-		PressureSplit_SP.lowerBound = 0.1;					PressureSplit_SP.upperBound = P_H_in;
-		PressureSplit_SP.tolerance = 0.0001;
-		PressureSplit_SP.iterationLimit = 50;
-		PressureSplit_SP.isErrorRel = true;
-		PressureSplit_SP.classInst = this;
-		PressureSplit_SP.monoEquation = &RegeneratorModel::PressureSplit_ME;
-		PressureSplit->setParameters(&PressureSplit_SP);
-
-		CarryoverMassFlow_SP.solverName = "Carryover Mass Fixed CV Solver";
-		CarryoverMassFlow_SP.monoEquation = &RegeneratorModel::CarryoverMassFlow_FIXED_CV_ME;
-	}
-	else if (valveMode == valveDesignOption::valveModes::FIXED_DP) {
-		CarryoverMassFlow_SP.solverName = "Carryover Mass Fixed DP Solver";
-		CarryoverMassFlow_SP.monoEquation = &RegeneratorModel::CarryoverMassFlow_FIXED_DP_ME;
-	}
-
-	WallThickness_SP.solverName = "Wall Thickness";
-	WallThickness_SP.target = stressAmplitude;
-	WallThickness_SP.guessValue1 = 0.04;		WallThickness_SP.guessValue2 = 0.05;
-	WallThickness_SP.lowerBound = 0;			WallThickness_SP.upperBound = 1;
-	WallThickness_SP.tolerance = 0.001;
-	WallThickness_SP.iterationLimit = 50;
-	WallThickness_SP.isErrorRel = true;
-	WallThickness_SP.classInst = this;
-	WallThickness_SP.monoEquation = &RegeneratorModel::WallThickness_ME;
-	WallThickness->setParameters(&WallThickness_SP);
-	
-	int statusSolver;
-	statusSolver = Diameter->solve();
-
-	if (statusSolver != C_monotonic_eq_solver::CONVERGED) {
-		return -1;
-	}
-	
-	calcCarryoverMassFlow();
-
-	CarryoverMassFlow_SP.guessValue1 = m_dot_carryover;
-	CarryoverMassFlow_SP.guessValue2 = m_dot_carryover + 1;
-	CarryoverMassFlow->setParameters(&CarryoverMassFlow_SP);
-
-	if (D_fr - 0.001 < Diameter_SP.lowerBound) {
-		Diameter->updateGuesses(D_fr, D_fr + 0.001);
-	}
-	else {
-		Diameter->updateGuesses(D_fr - 0.001, D_fr);
-	}
-
-	if (secondTargetMode == targetModes::dP_max) {
-		if (L - 0.001 < Length_SP.lowerBound) {
-			Length->updateGuesses(L, L + 0.001);
-		}
-		else {
-			Length->updateGuesses(L - 0.001, L);
-		}
-	}
-
-	if (T_H_out - 1 < HeatTransfer_SP.lowerBound) {
-		HeatTransfer->updateGuesses(T_H_out, T_H_out + 1);
-	}
-	else {
-		HeatTransfer->updateGuesses(T_H_out - 1, T_H_out);
-	}
-
-	if (dP_H - 10 < HotPressureDrop_SP.lowerBound) {
-		HotPressureDrop->updateGuesses(dP_H, dP_H + 10);
-	}
-	else {
-		HotPressureDrop->updateGuesses(dP_H - 10, dP_H);
-	}
-
-	if (dP_C - 10 < ColdPressureDrop_SP.lowerBound) {
-		ColdPressureDrop->updateGuesses(dP_C, dP_C+10);
-	}
-	else {
-		ColdPressureDrop->updateGuesses(dP_C - 10, dP_C);
-	}
-
-	double tolerance;
-	statusSolver = CarryoverMassFlow->solve(&tolerance);
-	
-	if (statusSolver != C_monotonic_eq_solver::CONVERGED) {
-		if (isfinite(tolerance) == false) {
-			return -1;
-		}
-
-		if (tolerance / min(m_dot_C, m_dot_H) > 0.01)
-		{
-			return -1;
-		}
-	}
-
-	if (valveMode == valveDesignOption::valveModes::FIXED_CV) {
-		dP_C = dP_C_total;
-		dP_H = dP_H_total;
-		calculateValveCvs();
-	}
-	
-	carryoverEnthDrop();
-	if (calculateCost() != 0) {
-		return -1;
-	}
-
-	m_dot_H -= m_dot_carryover;
-	m_dot_C -= m_dot_carryover;
-
-	return 0;
-}*/
 
 int RegeneratorModel::getOffDesignSolution()
 {
