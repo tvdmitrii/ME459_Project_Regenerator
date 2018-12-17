@@ -1,0 +1,645 @@
+Here1
+Here2
+Here3
+Here4
+Here5
+T_H_out/T_H_in = 0.750000, T_H_out = 600.000000
+dP_H/P_H_in = 0.014529, dP_H = 110.186667
+dP_C/P_C = 0.001653, dP_C = 41.320000
+V_0/max_Size = 0.070000, V_0 = 3.500000
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.270737, Q_dot_a - Q_dot_a_calc = -6052.895987
+(dP_H - dP_H_calc)/P_H_in = 0.008565, dP_H - dP_H_calc = 64.960050
+(dP_C - dP_C_calc)/P_C = 0.001269, dP_C - dP_C_calc = 31.710219
+(UA - targetParameter) /  (targetParameter + UA) = 0.356584, UA - targetParameter = 3879.438293
+
+
+Jn
+5.4658 0 0 0 
+0 579.452 0 0 
+0 0 -646.371 0 
+0 0 0 20.5526 
+
+
+Jn_inv
+0.182956 0 0 0 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0486556 
+
+
+T_H_out/T_H_in = 0.799533, T_H_out = 639.626259
+dP_H/P_H_in = 0.014514, dP_H = 110.074561
+dP_C/P_C = 0.001655, dP_C = 41.369059
+V_0/max_Size = 0.052650, V_0 = 2.632509
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.367445, Q_dot_a - Q_dot_a_calc = -7632.756763
+(dP_H - dP_H_calc)/P_H_in = 0.006518, dP_H - dP_H_calc = 49.435589
+(dP_C - dP_C_calc)/P_C = 0.001183, dP_C - dP_C_calc = 29.560486
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.291801, UA - targetParameter = 2884.225634
+1
+
+
+
+Jn
+-1.14174 0 0 2.31442 
+0 579.452 0 0 
+0 0 -646.371 0 
+0 0 0 18.7147 
+
+
+Jn_inv
+-0.875857 -0 -0 0.108316 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.053434 
+
+
+T_H_out/T_H_in = 0.446097, T_H_out = 356.877464
+dP_H/P_H_in = 0.014503, dP_H = 109.989246
+dP_C/P_C = 0.001657, dP_C = 41.414792
+V_0/max_Size = 0.037058, V_0 = 1.852904
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.119894, Q_dot_a - Q_dot_a_calc = 3861.289853
+(dP_H - dP_H_calc)/P_H_in = 0.005939, dP_H - dP_H_calc = 45.037591
+(dP_C - dP_C_calc)/P_C = 0.000745, dP_C - dP_C_calc = 18.620535
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.185505, UA - targetParameter = 1594.281744
+2
+
+
+
+Jn
+-1.48031 0 0 2.29948 
+0 579.452 0 0 
+0 0 -646.371 0 
+0 0 0 18.6916 
+
+
+Jn_inv
+-0.675536 -0 -0 0.0831062 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0535001 
+
+
+T_H_out/T_H_in = 0.511673, T_H_out = 409.338606
+dP_H/P_H_in = 0.014493, dP_H = 109.911522
+dP_C/P_C = 0.001658, dP_C = 41.443600
+V_0/max_Size = 0.027134, V_0 = 1.356677
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.056996, Q_dot_a - Q_dot_a_calc = 1694.490836
+(dP_H - dP_H_calc)/P_H_in = 0.002348, dP_H - dP_H_calc = 17.810039
+(dP_C - dP_C_calc)/P_C = 0.000502, dP_C - dP_C_calc = 12.537960
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.107085, UA - targetParameter = 839.495461
+3
+
+
+
+Jn
+-0.630607 0 0 2.17089 
+0 579.452 0 0 
+0 0 -646.371 0 
+0 0 0 18.4499 
+
+
+Jn_inv
+-1.58577 -0 -0 0.186588 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0542007 
+
+
+T_H_out/T_H_in = 0.582076, T_H_out = 465.660736
+dP_H/P_H_in = 0.014489, dP_H = 109.880786
+dP_C/P_C = 0.001659, dP_C = 41.462997
+V_0/max_Size = 0.021329, V_0 = 1.066472
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.005232, Q_dot_a - Q_dot_a_calc = 139.964800
+(dP_H - dP_H_calc)/P_H_in = -0.001636, dP_H - dP_H_calc = -12.409711
+(dP_C - dP_C_calc)/P_C = 0.000288, dP_C - dP_C_calc = 7.200363
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.046681, UA - targetParameter = 342.770153
+4
+
+
+
+Jn
+-0.55679 0 0 2.1648 
+0 579.452 0 0 
+0 0 -646.371 0 
+0 0 0 18.3957 
+
+
+Jn_inv
+-1.79601 -0 -0 0.211355 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0543607 
+
+
+T_H_out/T_H_in = 0.581607, T_H_out = 465.285409
+dP_H/P_H_in = 0.014491, dP_H = 109.902202
+dP_C/P_C = 0.001660, dP_C = 41.474137
+V_0/max_Size = 0.018792, V_0 = 0.939590
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.042723, Q_dot_a - Q_dot_a_calc = 1102.977634
+(dP_H - dP_H_calc)/P_H_in = -0.003712, dP_H - dP_H_calc = -28.150562
+(dP_C - dP_C_calc)/P_C = 0.000111, dP_C - dP_C_calc = 2.782267
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.012913, UA - targetParameter = 91.576748
+5
+
+
+
+Jn
+-3.56651 0 0 -14.1144 
+0 579.45 0 0 
+0 0 -646.371 0 
+0 0 0 13.4751 
+
+
+Jn_inv
+-0.280387 -0 -0 -0.293691 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0742112 
+
+
+T_H_out/T_H_in = 0.597378, T_H_out = 477.902557
+dP_H/P_H_in = 0.014498, dP_H = 109.950784
+dP_C/P_C = 0.001660, dP_C = 41.478441
+V_0/max_Size = 0.017833, V_0 = 0.891674
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.045043, Q_dot_a - Q_dot_a_calc = 1117.382137
+(dP_H - dP_H_calc)/P_H_in = -0.004866, dP_H - dP_H_calc = -36.906052
+(dP_C - dP_C_calc)/P_C = 0.000054, dP_C - dP_C_calc = 1.343051
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000259, UA - targetParameter = -1.811730
+6
+
+
+
+Jn
+-0.721024 0 0 -14.2873 
+0 579.45 0 0 
+0 0 -646.371 0 
+0 0 0 13.4761 
+
+
+Jn_inv
+-1.38692 -0 -0 -1.47041 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0742057 
+
+
+T_H_out/T_H_in = 0.659468, T_H_out = 527.574781
+dP_H/P_H_in = 0.014506, dP_H = 110.014475
+dP_C/P_C = 0.001660, dP_C = 41.480519
+V_0/max_Size = 0.017853, V_0 = 0.892635
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.036999, Q_dot_a - Q_dot_a_calc = -846.070298
+(dP_H - dP_H_calc)/P_H_in = -0.005703, dP_H - dP_H_calc = -43.249189
+(dP_C - dP_C_calc)/P_C = 0.000143, dP_C - dP_C_calc = 3.564579
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.003248, UA - targetParameter = 22.811258
+7
+
+
+
+Jn
+-1.31691 0 0 -14.2875 
+0 579.45 0 0 
+0 0 -646.371 0 
+0 0 0 13.4761 
+
+
+Jn_inv
+-0.759355 -0 -0 -0.805079 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0742056 
+
+
+T_H_out/T_H_in = 0.633988, T_H_out = 507.190760
+dP_H/P_H_in = 0.014516, dP_H = 110.089113
+dP_C/P_C = 0.001660, dP_C = 41.486034
+V_0/max_Size = 0.017612, V_0 = 0.880583
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.003960, Q_dot_a - Q_dot_a_calc = 93.184439
+(dP_H - dP_H_calc)/P_H_in = -0.005600, dP_H - dP_H_calc = -42.469408
+(dP_C - dP_C_calc)/P_C = 0.000086, dP_C - dP_C_calc = 2.160922
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.001728, UA - targetParameter = -12.074214
+8
+
+
+
+Jn
+-1.47233 0 0 -14.289 
+0 579.45 0 0 
+0 0 -646.371 0 
+0 0 0 13.4767 
+
+
+Jn_inv
+-0.679197 -0 -0 -0.720135 
+0 0.00172577 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0742021 
+
+
+T_H_out/T_H_in = 0.635434, T_H_out = 508.347253
+dP_H/P_H_in = 0.014526, dP_H = 110.162406
+dP_C/P_C = 0.001660, dP_C = 41.489377
+V_0/max_Size = 0.017740, V_0 = 0.886994
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.001119, Q_dot_a - Q_dot_a_calc = -26.371652
+(dP_H - dP_H_calc)/P_H_in = -0.005471, dP_H - dP_H_calc = -41.488796
+(dP_C - dP_C_calc)/P_C = 0.000100, dP_C - dP_C_calc = 2.488330
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.000282, UA - targetParameter = 1.973181
+9
+
+
+
+Jn
+-2.24063 0 0 -14.3571 
+0 579.425 0 0 
+0 0 -646.371 0 
+0 0 0 13.4939 
+
+
+Jn_inv
+-0.446304 -0 -0 -0.474856 
+0 0.00172585 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0741078 
+
+
+T_H_out/T_H_in = 0.635068, T_H_out = 508.054613
+dP_H/P_H_in = 0.014535, dP_H = 110.234009
+dP_C/P_C = 0.001660, dP_C = 41.493227
+V_0/max_Size = 0.017719, V_0 = 0.885950
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.000122, Q_dot_a - Q_dot_a_calc = -2.871995
+(dP_H - dP_H_calc)/P_H_in = -0.005479, dP_H - dP_H_calc = -41.550230
+(dP_C - dP_C_calc)/P_C = 0.000097, dP_C - dP_C_calc = 2.435106
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000051, UA - targetParameter = -0.359818
+10
+
+
+
+Jn
+-1.90864 0 0 -14.3382 
+0 579.04 0 0 
+0 0 -646.371 0 
+0 0 0 13.5019 
+
+
+Jn_inv
+-0.523933 -0 -0 -0.556386 
+0 0.001727 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0740639 
+
+
+T_H_out/T_H_in = 0.634976, T_H_out = 507.980631
+dP_H/P_H_in = 0.014545, dP_H = 110.305766
+dP_C/P_C = 0.001660, dP_C = 41.496994
+V_0/max_Size = 0.017723, V_0 = 0.886140
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.000091, Q_dot_a - Q_dot_a_calc = -2.155544
+(dP_H - dP_H_calc)/P_H_in = -0.005464, dP_H - dP_H_calc = -41.437278
+(dP_C - dP_C_calc)/P_C = 0.000098, dP_C - dP_C_calc = 2.443667
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.000001, UA - targetParameter = 0.007400
+11
+
+
+
+Jn
+-0.931279 0 0 -14.3784 
+0 573.068 0 0 
+0 0 -646.369 0 
+0 0 0 13.5023 
+
+
+Jn_inv
+-1.07379 -0 -0 -1.14346 
+0 0.00174499 0 0 
+-0 -0 -0.0015471 -0 
+0 0 0 0.0740614 
+
+
+T_H_out/T_H_in = 0.634879, T_H_out = 507.903011
+dP_H/P_H_in = 0.014554, dP_H = 110.378074
+dP_C/P_C = 0.001661, dP_C = 41.500775
+V_0/max_Size = 0.017723, V_0 = 0.886136
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000040, Q_dot_a - Q_dot_a_calc = 0.939435
+(dP_H - dP_H_calc)/P_H_in = -0.005453, dP_H - dP_H_calc = -41.355302
+(dP_C - dP_C_calc)/P_C = 0.000098, dP_C - dP_C_calc = 2.443858
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000005, UA - targetParameter = -0.036313
+12
+
+
+
+Jn
+-1.33823 0 0 -14.3787 
+0 567.598 0 0 
+0 0 -646.368 0 
+0 0 0 13.5024 
+
+
+Jn_inv
+-0.747258 -0 -0 -0.795759 
+0 0.00176181 0 0 
+-0 -0 -0.00154711 -0 
+0 0 0 0.0740611 
+
+
+T_H_out/T_H_in = 0.634904, T_H_out = 507.923540
+dP_H/P_H_in = 0.014564, dP_H = 110.450935
+dP_C/P_C = 0.001661, dP_C = 41.504555
+V_0/max_Size = 0.017723, V_0 = 0.886155
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.000004, Q_dot_a - Q_dot_a_calc = -0.086523
+(dP_H - dP_H_calc)/P_H_in = -0.005443, dP_H - dP_H_calc = -41.282006
+(dP_C - dP_C_calc)/P_C = 0.000098, dP_C - dP_C_calc = 2.449369
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.000002, UA - targetParameter = 0.013491
+13
+
+
+
+Jn
+-1.46369 0 0 -14.3806 
+0 497.964 0 0 
+0 0 -646.348 0 
+0 0 0 13.5033 
+
+
+Jn_inv
+-0.683204 -0 -0 -0.72759 
+0 0.00200818 0 0 
+-0 -0 -0.00154715 -0 
+0 0 0 0.0740557 
+
+
+T_H_out/T_H_in = 0.634903, T_H_out = 507.922655
+dP_H/P_H_in = 0.014575, dP_H = 110.533836
+dP_C/P_C = 0.001661, dP_C = 41.508345
+V_0/max_Size = 0.017723, V_0 = 0.886148
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000001, Q_dot_a - Q_dot_a_calc = 0.031878
+(dP_H - dP_H_calc)/P_H_in = -0.005433, dP_H - dP_H_calc = -41.200162
+(dP_C - dP_C_calc)/P_C = 0.000098, dP_C - dP_C_calc = 2.452827
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000000, UA - targetParameter = -0.001983
+14
+
+
+
+Jn
+-1.47608 0 0 -14.3822 
+0 6.20286 0 0 
+0 0 -646.225 0 
+0 0 0 13.5037 
+
+
+Jn_inv
+-0.677468 -0 -0 -0.721543 
+0 0.161216 0 0 
+-0 -0 -0.00154745 -0 
+0 0 0 0.0740539 
+
+
+T_H_out/T_H_in = 0.634904, T_H_out = 507.923225
+dP_H/P_H_in = 0.015450, dP_H = 117.175963
+dP_C/P_C = 0.001661, dP_C = 41.512141
+V_0/max_Size = 0.017723, V_0 = 0.886149
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000005, Q_dot_a - Q_dot_a_calc = 0.120967
+(dP_H - dP_H_calc)/P_H_in = -0.004557, dP_H - dP_H_calc = -34.557938
+(dP_C - dP_C_calc)/P_C = 0.000098, dP_C - dP_C_calc = 2.457491
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000000, UA - targetParameter = -0.002508
+15
+
+
+
+Jn
+-1.47608 0 0 -14.3822 
+0 1.00002 0 0 
+0 0 -646.225 0 
+0 0 0 13.5037 
+
+
+Jn_inv
+-0.67747 -0 -0 -0.721546 
+0 0.999982 0 0 
+-0 -0 -0.00154745 -0 
+0 0 0 0.0740539 
+
+
+T_H_out/T_H_in = 0.634907, T_H_out = 507.925800
+dP_H/P_H_in = 0.020007, dP_H = 151.733271
+dP_C/P_C = 0.001661, dP_C = 41.515944
+V_0/max_Size = 0.017723, V_0 = 0.886150
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000027, Q_dot_a - Q_dot_a_calc = 0.646557
+(dP_H - dP_H_calc)/P_H_in = -0.000000, dP_H - dP_H_calc = -0.000753
+(dP_C - dP_C_calc)/P_C = 0.000099, dP_C - dP_C_calc = 2.465620
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000002, UA - targetParameter = -0.014112
+16
+
+
+
+Jn
+-1.47608 0 0 -14.3822 
+0 0.999996 0 0 
+0 0 -646.225 0 
+0 0 0 13.5037 
+
+
+Jn_inv
+-0.677472 -0 -0 -0.721548 
+0 1 0 0 
+-0 -0 -0.00154745 -0 
+0 0 0 0.0740539 
+
+
+T_H_out/T_H_in = 0.634924, T_H_out = 507.939513
+dP_H/P_H_in = 0.020007, dP_H = 151.734024
+dP_C/P_C = 0.001661, dP_C = 41.519759
+V_0/max_Size = 0.017723, V_0 = 0.886158
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000001, Q_dot_a - Q_dot_a_calc = 0.022434
+(dP_H - dP_H_calc)/P_H_in = -0.000000, dP_H - dP_H_calc = -0.000592
+(dP_C - dP_C_calc)/P_C = 0.000099, dP_C - dP_C_calc = 2.470357
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.000001, UA - targetParameter = 0.007874
+17
+
+
+
+Jn
+-1.42052 0 0 -14.3817 
+0 0.99997 0 0 
+0 0 -646.173 0 
+0 0 0 13.5043 
+
+
+Jn_inv
+-0.703966 -0 -0 -0.749709 
+0 1.00003 0 0 
+-0 -0 -0.00154757 -0 
+0 0 0 0.0740507 
+
+
+T_H_out/T_H_in = 0.634926, T_H_out = 507.940724
+dP_H/P_H_in = 0.020007, dP_H = 151.734617
+dP_C/P_C = 0.001662, dP_C = 41.523582
+V_0/max_Size = 0.017723, V_0 = 0.886154
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000001, Q_dot_a - Q_dot_a_calc = 0.022801
+(dP_H - dP_H_calc)/P_H_in = -0.000000, dP_H - dP_H_calc = -0.000847
+(dP_C - dP_C_calc)/P_C = 0.000099, dP_C - dP_C_calc = 2.474058
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000000, UA - targetParameter = -0.000347
+18
+
+
+
+Jn
+-0.791095 0 0 -14.4164 
+0 0.996223 0 0 
+0 0 -639.669 0 
+0 0 0 13.506 
+
+
+Jn_inv
+-1.26407 -0 -0 -1.34927 
+0 1.00379 0 0 
+-0 -0 -0.00156331 -0 
+0 0 0 0.074041 
+
+
+T_H_out/T_H_in = 0.634927, T_H_out = 507.941650
+dP_H/P_H_in = 0.020007, dP_H = 151.735467
+dP_C/P_C = 0.001662, dP_C = 41.527450
+V_0/max_Size = 0.017723, V_0 = 0.886154
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.000001, Q_dot_a - Q_dot_a_calc = -0.015620
+(dP_H - dP_H_calc)/P_H_in = -0.000000, dP_H - dP_H_calc = -0.000090
+(dP_C - dP_C_calc)/P_C = 0.000099, dP_C - dP_C_calc = 2.477974
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.000000, UA - targetParameter = 0.000461
+19
+
+
+
+Jn
+-1.34913 0 0 -14.4181 
+0 0.99526 0 0 
+0 0 -628.506 0 
+0 0 0 13.5062 
+
+
+Jn_inv
+-0.74122 -0 -0 -0.791267 
+0 1.00476 0 0 
+-0 -0 -0.00159108 -0 
+0 0 0 0.0740401 
+
+
+T_H_out/T_H_in = 0.634927, T_H_out = 507.941298
+dP_H/P_H_in = 0.020007, dP_H = 151.735557
+dP_C/P_C = 0.001662, dP_C = 41.531392
+V_0/max_Size = 0.017723, V_0 = 0.886154
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000000, Q_dot_a - Q_dot_a_calc = 0.000986
+(dP_H - dP_H_calc)/P_H_in = 0.000000, dP_H - dP_H_calc = 0.000007
+(dP_C - dP_C_calc)/P_C = 0.000099, dP_C - dP_C_calc = 2.481891
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000000, UA - targetParameter = -0.000214
+20
+
+
+
+Jn
+-1.43342 0 0 -14.4191 
+0 0.99531 0 0 
+0 0 -556.676 0 
+0 0 0 13.5069 
+
+
+Jn_inv
+-0.697632 -0 -0 -0.744746 
+0 1.00471 0 0 
+-0 -0 -0.00179638 -0 
+0 0 0 0.0740363 
+
+
+T_H_out/T_H_in = 0.634927, T_H_out = 507.941304
+dP_H/P_H_in = 0.020007, dP_H = 151.735550
+dP_C/P_C = 0.001662, dP_C = 41.535851
+V_0/max_Size = 0.017723, V_0 = 0.886154
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.000000, Q_dot_a - Q_dot_a_calc = -0.000517
+(dP_H - dP_H_calc)/P_H_in = 0.000000, dP_H - dP_H_calc = 0.000018
+(dP_C - dP_C_calc)/P_C = 0.000099, dP_C - dP_C_calc = 2.486355
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.000000, UA - targetParameter = 0.000026
+21
+
+
+
+Jn
+-1.43786 0 0 -14.4206 
+0 0.995242 0 0 
+0 0 0.169807 0 
+0 0 0 13.5071 
+
+
+Jn_inv
+-0.695478 -0 -0 -0.742513 
+0 1.00478 0 0 
+0 0 5.88903 0 
+0 0 0 0.0740349 
+
+
+T_H_out/T_H_in = 0.634927, T_H_out = 507.941294
+dP_H/P_H_in = 0.020007, dP_H = 151.735532
+dP_C/P_C = 0.001076, dP_C = 26.893632
+V_0/max_Size = 0.017723, V_0 = 0.886154
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = -0.000000, Q_dot_a - Q_dot_a_calc = -0.000072
+(dP_H - dP_H_calc)/P_H_in = -0.000000, dP_H - dP_H_calc = -0.000001
+(dP_C - dP_C_calc)/P_C = -0.000486, dP_C - dP_C_calc = -12.156464
+(UA - targetParameter) / ( (targetParameter + UA)) = 0.000000, UA - targetParameter = 0.002238
+22
+
+
+
+Jn
+-1.43786 0 0 -14.4206 
+0 0.995242 0 0 
+0 0 1.00004 0 
+0 0 0 13.5071 
+
+
+Jn_inv
+-0.695478 -0 -0 -0.742513 
+0 1.00478 0 0 
+0 0 0.999959 0 
+0 0 0 0.0740349 
+
+
+T_H_out/T_H_in = 0.634927, T_H_out = 507.941482
+dP_H/P_H_in = 0.020007, dP_H = 151.735533
+dP_C/P_C = 0.001563, dP_C = 39.049598
+V_0/max_Size = 0.017723, V_0 = 0.886153
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000000, Q_dot_a - Q_dot_a_calc = 0.006236
+(dP_H - dP_H_calc)/P_H_in = -0.000000, dP_H - dP_H_calc = -0.000220
+(dP_C - dP_C_calc)/P_C = -0.000000, dP_C - dP_C_calc = -0.000043
+(UA - targetParameter) / ( (targetParameter + UA)) = -0.000000, UA - targetParameter = -0.002033
+23
+
+Solved after 23 iterations.
+
+
+T_H_out/T_H_in = 0.634927, T_H_out = 507.941482
+dP_H/P_H_in = 0.020007, dP_H = 151.735533
+dP_C/P_C = 0.001563, dP_C = 39.049598
+V_0/max_Size = 0.017723, V_0 = 0.886153
+(Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc) = 0.000000, Q_dot_a - Q_dot_a_calc = 0.006236
+(dP_H - dP_H_calc)/P_H_in = -0.000000, dP_H - dP_H_calc = -0.000220
+(dP_C - dP_C_calc)/P_C = -0.000000, dP_C - dP_C_calc = -0.000043
+(UA - targetParameter) /  (targetParameter + UA) = -0.000000, UA - targetParameter = -0.002033
+0.637155
+0.666947
+0.312083
+0.166932
+0.053838
+0.059459
+0.050222
+0.046092
+0.011375
+0.006971
+0.005749
+0.005654
+0.005596
+0.005547
+0.005532
+0.004661
+0.000128
+0.000101
+0.000100
+0.000100
+0.000099
+0.000100
+0.000487
