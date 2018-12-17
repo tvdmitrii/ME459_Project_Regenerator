@@ -78,6 +78,8 @@ private:
 	double wallThickness;
 	double m_dot_carryover;
 	double m_HTR_LP_dP, m_HTR_HP_dP;
+	double AR_guess;
+	double V_0_guess;
 
 	targetModes::targetModes target_1;
 	targetModes::target2Modes target_2;
@@ -163,7 +165,7 @@ public:
 	*/
 	int getDesignSolution();
 
-	void set_params(int target_1, int target_2, int operation_mode, int valveMode, double target_2_value, double P_0, double D_s, double e_v, double Q_dot_loss);
+	void set_params(int target_1, int target_2, int operation_mode, int valveMode, double target_2_value, double P_0, double D_s, double e_v, double Q_dot_loss, double AR_guess, double V_0_guess);
 	
 	int getDesignSolution(double* results);
 

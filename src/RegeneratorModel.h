@@ -805,6 +805,9 @@ private:
 
 	double max_Size = 5;
 
+	double AR_guess;
+	double V_0_guess;
+
 	//void calcValvePressureDrops();
 
 	SolverParameters<RegeneratorModel> HeatTransfer_SP;
@@ -848,7 +851,7 @@ public:
 		\param e_v Porosity or ratio of empty space inside of the heat exchanger to its total volume
 		\sa setInletState(), setDesignTargets()
 	*/
-	void setParameters(valveDesignOption::valveModes valveMode, double Q_dot_loss, double P_0, double D_s, double e_v);
+	void setParameters(valveDesignOption::valveModes valveMode, double Q_dot_loss, double P_0, double D_s, double e_v, double AR_guess, double V_0_guess);
 
 	/*!	\brief Sets design parameters.
 
