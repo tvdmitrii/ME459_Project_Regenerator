@@ -773,6 +773,8 @@ int RegeneratorModel::PressureSplit_ME(double regenMaxDrop_guess, double *regenM
 
 int RegeneratorModel::getDesignSolution()
 {
+	clock_t begin = clock();
+
 	HeatTransfer_SP.solverName = "Balance Heat Tansfer";
 	HeatTransfer_SP.target = 0;
 	HeatTransfer_SP.guessValue1 = T_C_in;						HeatTransfer_SP.guessValue2 = (T_C_in + T_H_in) / 2;
@@ -848,6 +850,12 @@ int RegeneratorModel::getDesignSolution()
 		return -1;
 	}
 
+	clock_t end = clock();
+	double elapsed = double(end - begin) / CLOCKS_PER_SEC * 1000;
+	spdlog::get("logger")->info(to_string(T_H_out) + "," + to_string(L) + "," + to_string(D_fr) + "," +
+		to_string(V_0) + "," + to_string(AR) + "," + to_string(UA) + "," + to_string(dP_max) + "," + to_string(epsilon) + "," +
+		to_string(Q_dot_a - Q_dot_a_calc) + "," + to_string(dP_H - dP_H_calc) + "," + to_string(dP_C - dP_C_calc)
+		+ "," + to_string(targetParameter) + "," + to_string(targetdP_max_Regen) + "," + to_string(elapsed));
 	return 0;
 }
 
