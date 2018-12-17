@@ -807,10 +807,10 @@ void RegeneratorModel::evaluate(Eigen::VectorXd point, Eigen::VectorXd& f) {
 	setSolver(point);
 	calculateModel();
 
-	f(0) = (Q_dot_a - Q_dot_a_calc)/(Q_dot_a + Q_dot_a_calc);
+	f(0) = (Q_dot_a - Q_dot_a_calc) / (Q_dot_a + Q_dot_a_calc);
 	f(1) = (dP_H - dP_H_calc)/P_H_in;
 	f(2) = (dP_C - dP_C_calc)/P_C;
-	f(3) = (UA - targetParameter)/ (targetParameter + UA);
+	f(3) = (UA - targetParameter) / (targetParameter * 3);
 }
 
 int RegeneratorModel::getDesignSolution()
