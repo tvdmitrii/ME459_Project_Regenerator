@@ -31,7 +31,7 @@ void LookupTable_1D::parseColNames()
 double LookupTable_1D::getValue(string colY, string colX, double x3)
 {
 	if (colNames.empty()) {
-		throw exception("There are no colomn headers!");
+		throw exception();
 	}
 
 	//Convert colomn names to colomn numbers using generated map 
