@@ -1,7 +1,7 @@
 #pragma once
 #include "numeric_solvers.h"
-#include "../spdlog/spdlog.h"
 #include <stdlib.h>
+#include <string>
 
 using namespace std;
 
@@ -75,7 +75,7 @@ public:
 	void setParameters(SolverParameters<T>* params)
 	{
 		if (inProgress) {
-			throw invalid_argument("Solver is currently running!");
+			throw exception();
 		}
 
 		solverName = params->solverName;
@@ -101,7 +101,7 @@ public:
 	
 	void updateGuesses(double guess1, double guess2) {
 		if (inProgress) {
-			throw invalid_argument("Solver is currently running!");
+			throw exception();
 		}
 
 		guessValue1 = guess1;
@@ -110,7 +110,7 @@ public:
 
 	void updateTarget(double target) {
 		if (inProgress) {
-			throw invalid_argument("Solver is currently running!");
+			throw exception();
 		}
 
 		this->target = target;
@@ -118,7 +118,7 @@ public:
 
 	void updateTolerance(double tolerance) {
 		if (inProgress) {
-			throw invalid_argument("Solver is currently running!");
+			throw exception();
 		}
 
 		this->tolerance = tolerance;
@@ -135,14 +135,6 @@ public:
 
 		int status = eqSolver->solve(guessValue1, guessValue2, target, solution, toleranceSolved, iter_solved);
 
-		//REL_TOL_WITH_0_TARGET = 0, EQUAL_GUESS_VALUES = 1
-		if (status < 2) {
-			spdlog::get("logger")->warn(solverName + " exited with status = " + std::to_string(status) +
-				". Guess1 = " + std::to_string(guessValue1) +
-				", Guess2 = " + std::to_string(guessValue2) +
-				", target = " + std::to_string(target));
-		}
-		
 		if (tolSolved != nullptr && toleranceSolved != numeric_limits<double>::quiet_NaN()) {
 			*tolSolved = toleranceSolved;
 		}
