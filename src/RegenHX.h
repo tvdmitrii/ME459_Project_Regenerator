@@ -50,15 +50,14 @@ struct S_des_solved
   \details   How to use: 1) Create an instance of the class. 2) Set heat exchanger parameters with setParameters(). 3) Set inlet parameters using setInletState() 
 				4) Set design targets with setDesignTargets() method. Now it is ready to go.
   \author    Dmitrii Turygin 	https://github.com/tvdmitrii
-  \version   2.0
-  \date      1/21/2018
+  \version   1.0
+  \date      12/17/2018
 */
 class RegenHX
 {
 private:
 
 	RegeneratorModel* regenModel;
-	valve* valves;
 
 	double dP_C;
 	double dP_H;
@@ -110,8 +109,6 @@ private:
 	*/
 	double costHX;
 
-	double costValves;
-
 	void resetDesignStructure();
 
 	/*!	\brief Sets fluid states for hot and cold inlets
@@ -122,11 +119,11 @@ private:
 		\param P_H_in Pressure of fluid at hot inlet in [kPa]
 		\param m_dot_H Mass flow rate of hot stream in [kg/s]
 		\param T_C_in Temperature of fluid at cold inlet in [K]
-		\param P_C Pressure of fluid at cold inlet in [kPa]
+		\param P_C_in Pressure of fluid at cold inlet in [kPa]
 		\param m_dot_C Mass flow rate of cold stream in [kg/s]
 		\sa setParameters(), setDesignTargets()
 	*/
-	void setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C, double m_dot_C);
+	void setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C_in, double m_dot_C);
 
 	/*!	\brief Sets flow and regenerator parameters
 	
@@ -188,10 +185,6 @@ public:
 		double & q_dot /*kWt*/, double & T_c_out /*K*/, double & T_h_out /*K*/);
 
 	void design_fix_TARGET_calc_outlet(int targetType /*-*/, double targetValue /*kW/K or $*/, double eff_limit /*-*/, double T_c_in /*K*/, double P_c_in /*kPa*/, double m_dot_c /*kg/s*/, double P_c_out /*kPa*/,
-		double T_h_in /*K*/, double P_h_in /*kPa*/, double m_dot_h /*kg/s*/, double P_h_out /*kPa*/,
-		double & q_dot /*kWt*/, double & T_c_out /*K*/, double & T_h_out /*K*/);
-
-	void off_design_solution(double T_c_in /*K*/, double P_c_in /*kPa*/, double m_dot_c /*kg/s*/, double P_c_out /*kPa*/,
 		double T_h_in /*K*/, double P_h_in /*kPa*/, double m_dot_h /*kg/s*/, double P_h_out /*kPa*/,
 		double & q_dot /*kWt*/, double & T_c_out /*K*/, double & T_h_out /*K*/);
 };

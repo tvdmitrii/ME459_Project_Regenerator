@@ -10,5 +10,4 @@ int main(int argc, char **argv)
 	double q_dot, T_c_out, T_h_out;
 	regenerator->design_fix_UA_calc_outlet(7000, 0.98, 444, 25000, 70, 24900, 800, 7600, 70, 7380, q_dot, T_c_out, T_h_out);
 	cout << "Q_dot = " << q_dot << ", T_C_out = " << T_c_out << ", T_H_out = " << T_h_out << endl;
-	//cout << "Efficiency " << regenerator->ms_des_solved.m_eff_design;
 }

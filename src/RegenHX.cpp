@@ -3,13 +3,11 @@
 RegenHX::RegenHX()
 {
 	regenModel = new RegeneratorModel();
-	valves = new valve[5];
 }
 
 RegenHX::~RegenHX()
 {
 	delete regenModel;
-	delete[] valves;
 }
 
 int RegenHX::getDesignSolution()
@@ -38,10 +36,6 @@ int RegenHX::getDesignSolution()
 	m_dot_carryover = solution.m_dot_carryover;
 	m_HTR_LP_dP = solution.m_HTR_LP_dP;
 	m_HTR_HP_dP = solution.m_HTR_HP_dP;
-	
-	for (int i = 0; i < 4; i++) {
-		valves[i] = solution.valves[i];
-	}
 
 	costHX *= modulesInParallel;
 	if (operationMode == valveDesignOption::VDO1) {
@@ -173,23 +167,6 @@ void RegenHX::design_fix_TARGET_calc_outlet(int targetType /*-*/, double targetV
 	T_h_out = T_H_out;
 }
 
-void RegenHX::off_design_solution(double T_c_in, double P_c_in, double m_dot_c, double P_c_out, double T_h_in, double P_h_in, double m_dot_h, double P_h_out, double & q_dot, double & T_c_out, double & T_h_out)
-{
-	setInletStates(T_h_in, P_h_in, m_dot_h, T_c_in, P_c_in, m_dot_c);
-	regenModel->setOutletStates(T_c_out, P_h_out, T_c_out, P_c_out);
-	
-
-	/*ms_od_solved.m_eff = epsilon;
-	ms_od_solved.m_min_DT = min((T_H_in - T_H_out), (T_C_out - T_C_in));
-	ms_od_solved.m_NTU = NTU_R_e;
-	ms_od_solved.m_P_c_out = P_C_out;
-	ms_od_solved.m_P_h_out = P_H_out;
-	ms_od_solved.m_q_dot = Q_dot_calc;
-	ms_od_solved.m_T_c_out = T_C_out;
-	ms_od_solved.m_T_h_out = T_H_out;
-	ms_od_solved.m_UA_total = UA;*/
-}
-
 void RegenHX::resetDesignStructure()
 {
 	ms_des_solved.m_DP_cold_des = ms_des_solved.m_DP_hot_des = ms_des_solved.m_eff_design = ms_des_solved.m_min_DT_design = ms_des_solved.m_NTU_design =
@@ -199,7 +176,7 @@ void RegenHX::resetDesignStructure()
 	ms_des_solved.m_eff_limited = false;
 }
 
-void RegenHX::setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C, double m_dot_C)
+void RegenHX::setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C_in, double m_dot_C)
 {
 	this->T_C_in = T_C_in;
 	this->T_H_in = T_H_in;
@@ -207,10 +184,10 @@ void RegenHX::setInletStates(double T_H_in, double P_H_in, double m_dot_H, doubl
 	this->m_dot_C = m_dot_C;
 
 	if (this->operationMode == valveDesignOption::VDO1) {
-		regenModel->setInletStates(T_H_in, P_H_in, m_dot_H / modulesInParallel, T_C_in, P_C, m_dot_C / modulesInParallel);
+		regenModel->setInletStates(T_H_in, P_H_in, m_dot_H / modulesInParallel, T_C_in, P_C_in, m_dot_C / modulesInParallel);
 	}
 	else {
-		regenModel->setInletStates(T_H_in, P_H_in, m_dot_H, T_C_in, P_C,  m_dot_C);
+		regenModel->setInletStates(T_H_in, P_H_in, m_dot_H, T_C_in, P_C_in,  m_dot_C);
 	}
 }
 
