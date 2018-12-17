@@ -852,6 +852,8 @@ int RegeneratorModel::getDesignSolution()
 		return -1;
 	}
 
+	AR = D_fr / L;
+
 	clock_t end = clock();
 	double elapsed = double(end - begin) / CLOCKS_PER_SEC * 1000;
 	spdlog::get("logger")->info(to_string(L_guess) + "," + to_string(D_guess) + "," + to_string(T_H_out) + "," + to_string(L) + "," + to_string(D_fr) + "," +
