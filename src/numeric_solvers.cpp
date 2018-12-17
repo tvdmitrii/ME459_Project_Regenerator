@@ -53,7 +53,6 @@
 
 #include "numeric_solvers.h"
 #include "csp_solver_util.h"
-#include "../spdlog/spdlog.h"
 
 #include <future>
 #include <algorithm>
