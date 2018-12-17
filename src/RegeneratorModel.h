@@ -7,6 +7,8 @@
 #include <ctime>
 #include "build_config.h"
 #include <iostream>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #define PI 3.14159265358979311600
 
@@ -94,12 +96,6 @@ private:
 
 	//! String containg path to a lookup CSV file.
 	static const string BALANCED_REGENERATOR_TABLE_PATH;
-
-	/*! \brief String containg path to a lookup CSV file.
-	
-		First coloumn contains number of cycles. Second coloumn contains SigmaA stress in [ksi].
-	*/
-	static const string FATIGUE_TABLE_PATH;
 
 	/*! \brief Pointer to a lookup table containing heat exchanger bed material properties.
 		\sa bedMaterialName
