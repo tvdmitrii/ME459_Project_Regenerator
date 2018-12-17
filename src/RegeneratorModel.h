@@ -48,14 +48,6 @@ namespace targetModes {
 	};
 }
 
-struct valve {
-	double T_in;
-	double P_in;
-	double m_dot;
-	double cv;
-	double dP;
-	double cost;
-};
 
 //! /breif Temporary solution that allows data transfer to RegenHX calss.
 struct RegeneratorSolution {
@@ -78,7 +70,6 @@ struct RegeneratorSolution {
 	double L;
 	double D_fr;
 	double wallThickness;
-	valve* valves;
 };
 
 /*!
@@ -88,8 +79,8 @@ struct RegeneratorSolution {
 			How to use: 1) Create an instance of the class. 2) Set heat exchanger parameters with setParameters(). 3) Set inlet parameters using setInletState()
 			4) Set design targets with setDesignTargets() method. Now it is ready to go.
 \author    Dmitrii Turygin 	https://github.com/tvdmitrii
-\version   1.0
-\date      1/21/2018
+\version   2.0
+\date      12/17/2018
 */
 class RegeneratorModel
 {
@@ -107,26 +98,10 @@ private:
 	//! String containg path to a lookup CSV file.
 	static const string BALANCED_REGENERATOR_TABLE_PATH;
 
-	/*! \brief String containg path to a lookup CSV file.
-	
-		First coloumn contains number of cycles. Second coloumn contains SigmaA stress in [ksi].
-	*/
-	static const string FATIGUE_TABLE_PATH;
-
 	/*! \brief Pointer to a lookup table containing heat exchanger bed material properties.
 		\sa bedMaterialName
 	*/
 	LookupTable_1D* bedMaterialTable;
-
-	/*! \brief Pointer to a lookup table containing heat exchanger shell material properties.
-		\sa shellMaterialName
-	*/
-	LookupTable_1D* shellMaterialTable;
-
-	/*! \brief Pointer to a lookup table containing heat exchanger insulation material properties.
-		\sa insulationMaterialName
-	*/
-	LookupTable_1D* insulationMaterialTable;
 
 	//! Pointer to a lookup table.
 	LookupTable_2D* regeneratorTable;
@@ -134,21 +109,8 @@ private:
 	//! Pointer to a lookup table.
 	LookupTable_1D* spheresRPTable;
 
-	//! Pointer to a lookup table. In [ksi]
-	LookupTable_1D* fatigueTable;
-
 	//! Contains property functions that are used to set CO2 states.
 	CO2_state CO2State;
-
-	valve* valves;
-
-	int valveIndex;
-
-	double dP_H_total;
-
-	double dP_C_total;
-
-	double targetdP_total;
 
 	//! Used to store error codes produced by CO2_state class methods. 
 	int error;
@@ -169,7 +131,7 @@ private:
 	double T_C_in;
 
 	//! Pressure at cold inlet in [kPa] 
-	double P_C;
+	double P_C_in;
 
 	//! Enthalpy at cold inlet in [kJ/kg]
 	double h_C_in;
@@ -250,7 +212,7 @@ private:
 	//! Enthalpy at state fixed by T_H_in and P_C_out in [kJ/kg]
 	double h_C_out_max;
 
-	//! Enthalpy at state fixed by T_H_in and P_C in [kJ/kg]
+	//! Enthalpy at state fixed by T_H_in and P_C_in in [kJ/kg]
 	double h_C_out_max_p;
 
 	/*! \brief Calculated pressure drop at cold side in [kPa]
@@ -421,8 +383,7 @@ private:
 	*/
 	double dP_max;
 
-	double targetAR;
-
+	//! Aspect ratio D_fr/L
 	double AR;
 
 	/*! \brief Heat transferred between cold and hot sides in [kW]
@@ -475,171 +436,16 @@ private:
 	*/
 	double X;
 
-	/*! \brief Carryover volume. [m^3]
-		
-	*/
-	double vol_extra = 0.02551;
-
-	/*! \brief Carryover coefficient. [-]
-		An extra valve was added between high pressure bed and low pressure bed. It is opened to
-		equalize the pressure between them during switching. This reduces carryover by a factor of 2.
-	*/
-	double CO = 2;
-
-	/* \brief Carryover mass flow rate [kg/s]
-	*/
-	double m_dot_carryover = 0;
-
-	/*! \brief Number of cycles completed during operationYears of operationHoursPerDay operation. [-]
-		\sa stressAmplitude, wallThickness
-	*/
-	double numberOfCycles;
-
-	/*! \brief Number of years that regenerative heat exchanger should operate. Used to calculate numberOfCycles. [years]
-		\sa stressAmplitude, wallThickness, operationHoursPerDay
-	*/
-	double operationYears = 30;
-
-	/*! \brief Number of hours per day that regenerative heat exchanger should operate. Used to calculate numberOfCycles [hrs/day]
-		\sa stressAmplitude, wallThickness, operationYears
-	*/
-	double operationHoursPerDay = 10;
-
-	/*! \brief Allows to choose which second design parameter to set.
-	
-		See targetModes.
-		\sa targetParameter, targetModes
-	*/
+	//! Allows to choose first design target from targetModes
 	targetModes::targetModes targetMode;
 
+	//! Allows to choose first design target from target2Modes
 	targetModes::target2Modes secondTargetMode;
-
-	valveDesignOption::valveModes valveMode;
-
-	/*! \brief Thickness of the insulation on the inside of the D_shell pipe [m]
-		\sa D_fr, D_shell
-	*/
-	double insulationThickness = 0.05;
-
-	/*! \brief Sets how much of insulation goes on the end half-spheres of the module. [-]
-	
-		From 0 (no insulation) to 1 (all of the volume).
-	*	\sa D_fr, D_shell
-	*/
-	double insulationParameter = 1;
-
-	/*! \brief stressAmplitude is amlitude of stess. [MPa]
-		\sa FATIGUE_TABLE_PATH, numberOfCycles, wallThickness
-	*/
-	double stressAmplitude;
-
-	/*! \brief Wall thickness of regenerator. [m]
-		\sa stressAmplitude, numberOfCycles
-	*/
-	double wallThickness;
-
-	//! Atmospheric pressure. [MPa]
-	double Patm = 0.101325;
-
-	/*! \brief Volume of the steel shell of the module. [m^3]
-		\sa calculateCost()
-	*/
-	double volumeShell;
-
-	/*! \brief Volume of the bed insulation of the module. [m^3]
-		\sa calculateCost()
-	*/
-	double volumeInsulation;
-
-	/*! \brief Volume of the bed consisting of spheres  of the module. [m^3]
-		\sa calculateCost()
-	*/
-	double volumeBed;
-
-	/*! \brief Mass of the steel shell . [kg]
-		\sa calculateCost()
-	*/
-	double massShell;
-
-	/*! \brief Mass of the insulation of the module. [kg]
-		\sa calculateCost()
-	*/
-	double massInsulation;
-
-	/*! \brief Mass of the bed consisting of spheres of the module. [kg]
-		\sa calculateCost()
-	*/
-	double massBed;
-
-	/*! \brief Material of the regenerator module shell.
-		\sa calculateCost()
-	*/
-	string shellMaterialName = "Carbon_steel_AISI1010";
-
-	/*! \brief Material of the regenerator module insulation.
-		\sa calculateCost()
-	*/
-	string insulationMaterialName = "Al_oxide_polycryst";
 
 	/*! \brief Material of the regenerator module bed consisting of spheres.
 		\sa calculateCost()
 	*/
 	string bedMaterialName = "Stainless_AISI304";
-
-	/*! \brief Cost of the regenerator module shell material per kilogram. [$/kg]
-		\sa calculateCost()
-	*/
-	double specificCostShellMaterial = 1.431;
-
-	/*! \brief Cost of the regenerator module insulation material per kilogram. [$/kg]
-		\sa calculateCost()
-	*/
-	double specificCostInsulationMaterial = 3.08;
-
-	/*! \brief Cost of the regenerator module bed material per kilogram. [$/kg]
-		\sa calculateCost()
-	*/
-	double specificCostBedMaterial = 4.171;
-
-	/*! \brief Cost of the steel shell of the module. [$]
-		\sa calculateCost()
-	*/
-	double costShellMaterial;
-
-	/*! \brief Cost of the bed insulation of the module. [$]
-		\sa calculateCost()
-	*/
-	double costInsulationMaterial;
-
-	/*! \brief Cost of the bed consisting of spheres per bed module. [$]
-		\sa calculateCost()
-	*/
-	double costBedMaterial;
-
-	/*! \brief Static price of welding componets of the module. [$]
-		\sa calculateCost()
-	*/
-	double priceWelding = 1254.77 * 2;
-
-	/*! \brief Static price of casting componets of the module. [$]
-		\sa calculateCost()
-	*/
-	double priceCasting = 4984.65;
-
-	/*! \brief Static price of casting steel components of the module. [$]
-		\sa calculateCost()
-	*/
-	double priceCastingSteel = 11610.05 + 3285.91 * 2;
-
-	/*! \brief Cost of of the regenerator module material. [$]
-		\sa calculateCost()
-	*/
-	double costMaterial;
-
-	/*! \brief Total cost of the regenerator module including static costs of welding and casting. [$]
-		\sa calculateCost(), costPerModuleMaterial
-	*/
-	double costModule;
 
 	/*!	\brief The value of the second target design parameter.
 		\sa targetMode
@@ -717,9 +523,8 @@ private:
 	*/
 	void packedspheresFitCO2(double m_dot, double d, double A_fr, double L, double T, double P, double porosity, double* f, double* h, double* NTU, double* DP);
 
+	//! Initializes variables related to massflow m_dot_H and m_dot_C
 	void massflowVariablesInit();
-
-	
 
 	/*! \brief Model that describes the behaviour of the regenerator module during hot/cold cycle.
 	
@@ -737,86 +542,11 @@ private:
 	*/
 	void calculateModel();
 
-	void calcValvePressureDrops();
-	void calculateValveCvs();
-
 	//! Loads lookup tables into memory for quick access.
 	void loadTables();
 
-	//! Calculates cost of the regenerato module.
-	int calculateCost();
-
-	/*! \brief Monotonic equation solver that balances total heat transfer by adjusting T_H_out.
-		\sa HeatTransfer_ME
-	*/
-	MonoSolver<RegeneratorModel>* HeatTransfer;
-
-	/*! \brief Monotonic equation solver that calculates hot stream pressure drop.
-		\sa HotPressureDrop_ME
-	*/
-	MonoSolver<RegeneratorModel>* HotPressureDrop;
-
-	/*! \brief Monotonic equation solver that calculates cold stream pressure drop.
-		\sa ColdPressureDrop_ME
-	*/
-	MonoSolver<RegeneratorModel>* ColdPressureDrop;
-
-	/*! \brief Monotonic equation solver that finds L that yields desired targetdP_max_Regen.
-		\sa Length_ME
-	*/
-	MonoSolver<RegeneratorModel>* Length;
-
-	/*! \brief Monotonic equation solver that finds D_fr that hits targetParameter for dP_max target2Mode.
-		\sa Diameter_dP_ME
-	*/
-	MonoSolver<RegeneratorModel>* Diameter;
-
-	/*! \brief Monotonic equation solver that balances carryover mass flow and regenerator mass flow.
-		\sa CarryoverMassFlow_dP_ME
-	*/
-	MonoSolver<RegeneratorModel>* CarryoverMassFlow;
-
-	/*! \brief Monotonic equation solver that calculates wall thickness.
-		\sa WallThickness_ME
-	*/
-	MonoSolver<RegeneratorModel>* WallThickness;
-
-	/*! \brief Monotonic equation solver that splits pressure drop between valves and regenerator itself.
-	-	\sa PressureSplit_ME
-	-	*/
-	MonoSolver<RegeneratorModel>* PressureSplit;
-	
-	MonoSolver<RegeneratorModel>* Valve;
-
-	/* \breif Integrates Density*dL of CO2 along the regenerator bed.
-		Linear temperature distribution with respect to L inside of the regenerator is assumed.
-	*/
-	double densityIntegral(double T_low, double T_high, double P);
-
-	/*	\brief Calculates carryover mass flow.
-		Steady state bypass flow from cold inlet to hot outlet.
-		\sa P_0
-	*/
-	void calcCarryoverMassFlow();
-
-	/*	\brief Calculates enthalpy drop that occurs at hot outlet due carryover mass flow.
-		Enthalpy drop occures, because carryover is a steady state bypass flow from cold inlet to hot outlet.
-	*/
-	void carryoverEnthDrop();
-
+	//! Maximum size used to normalize solver variables
 	double max_Size = 5;
-
-	//void calcValvePressureDrops();
-
-	SolverParameters<RegeneratorModel> HeatTransfer_SP;
-	SolverParameters<RegeneratorModel> HotPressureDrop_SP;
-	SolverParameters<RegeneratorModel> ColdPressureDrop_SP;
-	SolverParameters<RegeneratorModel> Length_SP;
-	SolverParameters<RegeneratorModel> Diameter_SP;
-	SolverParameters<RegeneratorModel> CarryoverMassFlow_SP;
-	SolverParameters<RegeneratorModel> WallThickness_SP;
-	SolverParameters<RegeneratorModel> PressureSplit_SP;
-	SolverParameters<RegeneratorModel> Valve_SP;
 
 public:
 	RegeneratorModel();
@@ -830,15 +560,11 @@ public:
 		\param P_H_in Pressure of fluid at hot inlet in [kPa]
 		\param m_dot_H Mass flow rate of hot stream in [kg/s]
 		\param T_C_in Temperature of fluid at cold inlet in [K]
-		\param P_C Pressure of fluid at cold inlet in [kPa]
+		\param P_C_in Pressure of fluid at cold inlet in [kPa]
 		\param m_dot_C Mass flow rate of cold stream in [kg/s]
 		\sa setParameters(), setDesignTargets()
 	*/
-	void setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C, double m_dot_C);
-
-	void setValves(valve * valves);
-
-	void setOutletStates(double T_H_out, double P_H_out, double T_C_out, double P_C_out);
+	void setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C_in, double m_dot_C);
 
 	/*!	\brief Sets flow and regenerator parameters
 
@@ -861,28 +587,39 @@ public:
 	*/
 	void setDesignTargets(targetModes::targetModes targetMode, targetModes::target2Modes secondTargetMode, double targetParameter, double secondTargetParameter);
 
+	/*!	\brief Transfers variables from the solver to the model.
 
-	int HeatTransfer_ME(double T_H_out, double * QdotAsDifference);
-	int HotPressureDrop_ME(double dP_H, double * dP_HsDifference);
-	int ColdPressureDrop_ME(double dP_C, double * dP_CsDifference);
-	int Length_ME(double L, double * dP_max);
-	int Diameter_dP_ME(double D_fr, double * targetParameter);
-	int Diameter_AR_ME(double D_fr, double * targetParameter);
-	int CarryoverMassFlow_FIXED_DP_ME(double m_dot_carryover, double * comass_difference);
-	int CarryoverMassFlow_FIXED_CV_ME(double m_dot_carryover, double * comass_difference);
-	int WallThickness_ME(double th, double * stressAmplitude);
-	int Valve_ME(double dP, double * dP_difference);
-	int PressureSplit_ME(double regenMaxDrop_guess, double * diffRegenMaxdrop);
+		Accounts for normalization.
 
-	void setSolver(Eigen::VectorXd & params);
+		\param point Point to be set
+	*/
+	void setPoint(Eigen::VectorXd point);
 
-	void jacobian(int n, Eigen::VectorXd x_nm1, Eigen::VectorXd x_n, Eigen::MatrixXd & Jn);
+	/*!	\brief Calculates Jacobian at x_n.
 
-	void evaluate(Eigen::VectorXd point, Eigen::VectorXd & values);
+		Note that this function does not calculate full Jacobian. Due to stability issues, functions and variables are
+		arranged so that x(i) primarily affects f(i). Only diagonal df(i)/dx(i) is calculated.
+
+		\param n Number of functions/variables
+		\param x_n Point at which Jacobian is calculated
+		\param dx Step size for finite-difference approximation of a derivative
+		\param Jn returned Jacobian matrix
+	*/
+	void jacobian(int n, Eigen::VectorXd x_n, Eigen::VectorXd dx, Eigen::MatrixXd & Jn);
+
+	/*!	\brief Evaluates functions at a certain point x.
+
+		This function internaly calls calculateModel().
+
+		\param point Point at which functions are evaluated
+		\param f Returned vector of function values
+	*/
+	void evaluate(Eigen::VectorXd point, Eigen::VectorXd & f);
 	
-
+	//! Calculates model solution
 	int getDesignSolution();
-	int getOffDesignSolution();
+
+	//! Returns solution
 	void getSolution(RegeneratorSolution* solution);
 };
 

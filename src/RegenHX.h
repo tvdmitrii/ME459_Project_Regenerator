@@ -58,7 +58,6 @@ class RegenHX
 private:
 
 	RegeneratorModel* regenModel;
-	valve* valves;
 
 	double dP_C;
 	double dP_H;
@@ -122,11 +121,11 @@ private:
 		\param P_H_in Pressure of fluid at hot inlet in [kPa]
 		\param m_dot_H Mass flow rate of hot stream in [kg/s]
 		\param T_C_in Temperature of fluid at cold inlet in [K]
-		\param P_C Pressure of fluid at cold inlet in [kPa]
+		\param P_C_in Pressure of fluid at cold inlet in [kPa]
 		\param m_dot_C Mass flow rate of cold stream in [kg/s]
 		\sa setParameters(), setDesignTargets()
 	*/
-	void setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C, double m_dot_C);
+	void setInletStates(double T_H_in, double P_H_in, double m_dot_H, double T_C_in, double P_C_in, double m_dot_C);
 
 	/*!	\brief Sets flow and regenerator parameters
 	
@@ -188,10 +187,6 @@ public:
 		double & q_dot /*kWt*/, double & T_c_out /*K*/, double & T_h_out /*K*/);
 
 	void design_fix_TARGET_calc_outlet(int targetType /*-*/, double targetValue /*kW/K or $*/, double eff_limit /*-*/, double T_c_in /*K*/, double P_c_in /*kPa*/, double m_dot_c /*kg/s*/, double P_c_out /*kPa*/,
-		double T_h_in /*K*/, double P_h_in /*kPa*/, double m_dot_h /*kg/s*/, double P_h_out /*kPa*/,
-		double & q_dot /*kWt*/, double & T_c_out /*K*/, double & T_h_out /*K*/);
-
-	void off_design_solution(double T_c_in /*K*/, double P_c_in /*kPa*/, double m_dot_c /*kg/s*/, double P_c_out /*kPa*/,
 		double T_h_in /*K*/, double P_h_in /*kPa*/, double m_dot_h /*kg/s*/, double P_h_out /*kPa*/,
 		double & q_dot /*kWt*/, double & T_c_out /*K*/, double & T_h_out /*K*/);
 };
