@@ -7,6 +7,7 @@
 #include <ctime>
 #include "Eigen/Eigen";
 #include "Eigen/LU";
+#include "build_config.h"
 
 #define PI 3.14159265358979311600
 
