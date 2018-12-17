@@ -44,7 +44,6 @@ int RegenHX::getDesignSolution()
 		m_dot_carryover *= modulesInParallel;
 	}
 
-	costHX += costValves;
 
 	return status;
 }
@@ -144,15 +143,7 @@ void RegenHX::design_fix_TARGET_calc_outlet(int targetType /*-*/, double targetV
 	setInletStates(T_h_in, P_h_in, m_dot_h, T_c_in, P_c_in, m_dot_c);
 
 
-	if (targetType == 0) {
-		setDesignTargets(targetModes::UA, secondTargetMode, targetValue, dP_max_Regen);
-	}
-	else if (targetType == 1) {
-		setDesignTargets(targetModes::COST, secondTargetMode, targetValue - costValves, dP_max_Regen);
-	}
-	else if (targetType == 2) {
-		setDesignTargets(targetModes::EFF, secondTargetMode, targetValue, dP_max_Regen);
-	}
+	setDesignTargets(targetModes::UA, secondTargetMode, targetValue, dP_max_Regen);
 
 	int status = getDesignSolution();
 

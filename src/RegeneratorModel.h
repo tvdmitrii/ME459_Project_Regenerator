@@ -6,6 +6,7 @@
 #include "numeric_solvers.h"
 #include <ctime>
 #include "build_config.h"
+#include <iostream>
 
 #define PI 3.14159265358979311600
 

@@ -375,6 +375,7 @@ int RegeneratorModel::Diameter_dP_ME(double D_fr, double * targetParameter)
 
 int RegeneratorModel::getDesignSolution()
 {
+	clock_t begin = clock();
 	HeatTransfer_SP.solverName = "Balance Heat Tansfer";
 	HeatTransfer_SP.target = 0;
 	HeatTransfer_SP.guessValue1 = T_C_in;						HeatTransfer_SP.guessValue2 = (T_C_in + T_H_in) / 2;
@@ -443,6 +444,12 @@ int RegeneratorModel::getDesignSolution()
 	if (statusSolver != C_monotonic_eq_solver::CONVERGED) {
 		return -1;
 	}
+
+	clock_t end = clock();
+	double elapsed = double(end - begin) / CLOCKS_PER_SEC * 1000;
+	cout << T_H_out << ", " << L << ", " << D_fr << ", " << V_0 << ", " << AR << ", " << UA << ", " <<
+		dP_max << ", " << epsilon << ", " << (Q_dot_a - Q_dot_a_calc) << ", " << (dP_H - dP_H_calc) << ", " << (dP_C - dP_C_calc)
+		<< ", " << targetParameter << ", " << targetdP_max_Regen << ", "  << ", " << elapsed << endl;
 
 	return 0;
 }
