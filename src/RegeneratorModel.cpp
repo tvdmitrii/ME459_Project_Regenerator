@@ -370,7 +370,7 @@ int RegeneratorModel::getDesignSolution()
 	jacobian(n, x_0, dx, Jn);
 	evaluate(x_0, f_0);
 
-	///Solution tolerance
+	///Solution tolerance is 1e-5 for all functions
 	double eps = 1e-5;
 
 	int iterations = 0;
