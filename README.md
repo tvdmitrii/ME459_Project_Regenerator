@@ -42,3 +42,7 @@ successively better approximations of the roots. The functions can be of multipl
 would improve robustness to initial guess values. Moreover, Jacobian is not calculated at every
 iteration, but rather is successively improved, which cuts down on calls to thermodynamic model
 and improves the performance of the code.
+
+### Credits
+https://github.com/NREL/ssc/blob/develop/tcs/numeric_solvers.cpp
+https://github.com/gabime/spdlog
