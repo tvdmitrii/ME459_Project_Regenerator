@@ -43,6 +43,8 @@ would improve robustness to initial guess values. Moreover, Jacobian is not calc
 iteration, but rather is successively improved, which cuts down on calls to thermodynamic model
 and improves the performance of the code.
 
+For more information: https://github.com/tvdmitrii/ME459_Project_Regenerator/blob/master/Turygin_ME459_FinalProject.pdf
+
 ### Credits
 https://github.com/NREL/ssc/blob/develop/tcs/numeric_solvers.cpp
 
