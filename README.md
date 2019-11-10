@@ -45,4 +45,5 @@ and improves the performance of the code.
 
 ### Credits
 https://github.com/NREL/ssc/blob/develop/tcs/numeric_solvers.cpp
+
 https://github.com/gabime/spdlog
